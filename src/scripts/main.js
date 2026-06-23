@@ -62,7 +62,7 @@ function initMotion() {
     ['.chapter--nadir', '--descent-bg', '--nadir-bg'],
     ['.chapter--return', '--nadir-bg', '--return-bg'],
   ]
-  const CROSSFADE = 0.15 // fraction of the pin spent crossfading the ground
+  const CROSSFADE = 0.1 // fraction of the pin spent crossfading the ground
 
   flow.forEach(([selector, fromVar, toVar]) => {
     const section = document.querySelector(selector)
@@ -84,16 +84,19 @@ function initMotion() {
           },
         },
       })
-      /* Reveal only after the ground has settled (0.18 > CROSSFADE), hold, then
-         dissolve before release. Scrubbed, so it is reversible. The hold is the
-         gap between the two tweens. */
+      /* Reveal once the ground has settled (0.12 > CROSSFADE), then HOLD all the
+         way to release. No dissolve: the copy rides the pin release and scrolls
+         away with its section, so the handoff to the next chapter stays
+         continuous instead of dropping into bare ground. The hold pad keeps the
+         timeline a full unit long so scrub positions stay stable. Scrubbed, so
+         the whole thing is reversible. */
       .fromTo(
         content,
         { autoAlpha: 0, y: 28 },
         { autoAlpha: 1, y: 0, ease: 'power2.out', duration: 0.3 },
-        0.18,
+        0.12,
       )
-      .to(content, { autoAlpha: 0, y: -16, ease: 'power2.in', duration: 0.2 }, 0.82)
+      .to(content, { autoAlpha: 1, duration: 0.58 }, 0.42)
   })
 
   /* The creator is the settled close. Both it and the return are light grounds,
