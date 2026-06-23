@@ -94,6 +94,34 @@ body::after {
   opacity: var(--grain-opacity);
 }
 
+/* Motion backdrop. The Doré register crossfade is painted here, behind all
+   content, and is only active when the motion layer is enabled (.motion is set
+   on <html> by the script). Without JS or under reduced motion the sections
+   keep their own solid grounds and this stays hidden. */
+#backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  display: none;
+  background: var(--stone-bg);
+}
+html.motion #backdrop {
+  display: block;
+}
+
+/* Lenis core rules. Imported by hand because the package does not expose its
+   stylesheet as a subpath. Only what this build uses. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

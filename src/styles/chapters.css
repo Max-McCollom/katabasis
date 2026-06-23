@@ -20,6 +20,16 @@
   margin-inline: auto;
 }
 
+/* When the motion layer drives the background, the sections go transparent so
+   the crossfading backdrop shows through. The solid grounds above remain the
+   no-JS / reduced-motion baseline. */
+html.motion .hero,
+html.motion .chapter,
+html.motion .creator,
+html.motion .colophon {
+  background-color: transparent;
+}
+
 /* --- Hero (entry / threshold register) --- */
 .hero {
   background: var(--stone-bg);
@@ -87,9 +97,8 @@
   background: var(--return-bg);
   color: var(--return-ink);
 }
-/* The single earned accent: the return numeral, and nowhere below it. The
-   glyph is aria-hidden (decorative ordering), so the amber is contrast-exempt;
-   see the --amber note in tokens.css for the strict-AA alternative. */
+/* The single earned accent: the return numeral, and nowhere below it.
+   The amber clears strict WCAG AA on the return ground (see tokens.css). */
 .chapter--return .chapter__num {
   color: var(--amber);
   opacity: 1;

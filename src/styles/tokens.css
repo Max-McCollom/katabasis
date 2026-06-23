@@ -29,11 +29,10 @@
   --return-ink: #1b1813;
   --return-faint: #6c665c;
 
-  /* The single earned accent. Return only. Applied to the aria-hidden,
-     decorative return numeral: 3.65:1 on return-bg, which clears the 3:1
-     graphical/large threshold and is contrast-exempt as decoration. For
-     strict 4.5:1 on that glyph, #8a6113 is the drop-in (a deeper old-gold). */
-  --amber: #9c6f23;
+  /* The single earned accent. Return only. Applied to the return numeral at
+     4.53:1 on return-bg: clears strict WCAG AA as normal text, taking no
+     decorative exemption. A deep, warm old-gold. */
+  --amber: #8a6113;
 
   /* Settled close after the return */
   --close-bg: #d7d1c7;
