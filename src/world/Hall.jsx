@@ -5,19 +5,23 @@ import { flutedColumnGeometry, archRingGeometry, radialTexture } from './geometr
 import { makeMatcapSet } from '../render/matcaps.js'
 import { makeEstateMatcap } from '../render/estateMaterial.js'
 import { BAYS, COL_X, COL_H, WALL_X, zNear, zFar, len, midZ, CANDLES } from './layout.js'
+import { T } from '../render/treatments.js'
+import { REDUCED } from '../util/env.js'
 
+const FLICK = REDUCED ? 0.25 : 1 // dampen sway/flicker under reduced-motion
 const SPRING = COL_H // arches spring from the column tops
 export { CANDLES }
 
 export function useEstateMaterials() {
   return useMemo(() => {
     const set = makeMatcapSet()
+    const c = T.candle
     return {
-      stone: makeEstateMatcap(set.stone, CANDLES, { range: 7.0, strength: 2.4 }),
-      oak: makeEstateMatcap(set.oak, CANDLES, { range: 7.0, strength: 2.8 }),
-      brass: makeEstateMatcap(set.brass, CANDLES, { range: 9.0, strength: 3.0 }),
-      gilt: makeEstateMatcap(set.gilt, CANDLES, { range: 8.0, strength: 3.0 }),
-      floor: makeEstateMatcap(set.stone, CANDLES, { range: 7.0, strength: 2.0, floor: true }),
+      stone: makeEstateMatcap(set.stone, CANDLES, { warm: c.warm, range: c.range, strength: c.strength * 0.92 }),
+      oak: makeEstateMatcap(set.oak, CANDLES, { warm: c.warm, range: c.range, strength: c.strength * 1.08 }),
+      brass: makeEstateMatcap(set.brass, CANDLES, { warm: c.warm, range: c.range + 1.5, strength: c.strength * 1.15 }),
+      gilt: makeEstateMatcap(set.gilt, CANDLES, { warm: c.warm, range: c.range + 0.5, strength: c.strength * 1.15 }),
+      floor: makeEstateMatcap(set.stone, CANDLES, { warm: c.warm, range: c.range, strength: c.strength * 0.78, floor: true }),
     }
   }, [])
 }
@@ -59,7 +63,7 @@ function Candle({ position }) {
   const ctex = useMemo(() => radialTexture({ inner: 'rgba(255,240,210,1)', outer: 'rgba(255,200,120,0)' }), [])
   useFrame((s) => {
     const t = s.clock.elapsedTime
-    const f = 0.82 + 0.14 * Math.sin(t * 9 + position[0] * 3) + 0.06 * Math.sin(t * 23.3 + position[2])
+    const f = 0.82 + FLICK * (0.14 * Math.sin(t * 9 + position[0] * 3) + 0.06 * Math.sin(t * 23.3 + position[2]))
     if (ref.current) {
       ref.current.scale.setScalar(3.0 * f)
       ref.current.material.opacity = 0.85 * f
@@ -89,6 +93,7 @@ export default function Hall() {
   })
   const farArch = useMemo(() => archRingGeometry({ ri: 6.2, ro: 8.2, depth: 2.6 }), [])
   const steps = useMemo(() => Array.from({ length: 12 }, (_, i) => i), [])
+  const pendant = useMemo(() => flutedColumnGeometry({ height: 11, radius: 0.6 }), [])
 
   return (
     <group>
@@ -147,6 +152,25 @@ export default function Hall() {
       <mesh position={[0, -1.5, zFar - 14]} rotation={[-Math.PI / 2, 0, 0]} material={mat.stone}>
         <planeGeometry args={[18, 18]} />
       </mesh>
+
+      {/* UNCANNY: bridges crossing the void above, half-lost in fog, slightly
+          askew so the space reads a touch wrong. Piranesi Carceri verticality. */}
+      <mesh position={[0, 21.5, 12]} rotation={[0, 0, 0.015]} material={mat.stone}>
+        <boxGeometry args={[2 * WALL_X, 0.8, 3.2]} />
+      </mesh>
+      <mesh position={[0, 25.5, -8]} rotation={[0, 0.14, -0.02]} material={mat.stone}>
+        <boxGeometry args={[2 * WALL_X + 4, 0.8, 2.6]} />
+      </mesh>
+
+      {/* UNCANNY: pendant columns hanging from the dark, never reaching the
+          floor. An impossible colonnade folded above the descent. */}
+      {[
+        [-COL_X, 18, -16],
+        [COL_X, 16, -22],
+        [0, 20, zFar - 8],
+      ].map((p, i) => (
+        <mesh key={'pend' + i} geometry={pendant} material={mat.stone} position={p} rotation={[Math.PI, 0, 0]} />
+      ))}
 
       {/* candlelight along the colonnade (same points the bounce shader reads) */}
       {CANDLES.map((p, i) => (

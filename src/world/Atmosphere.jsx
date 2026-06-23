@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
+import { T } from '../render/treatments.js'
+import { LOW } from '../util/env.js'
 
 // Drifting dust: instanced points with all motion in the vertex shader (near-
 // zero cost ambient life). Denser, warmer where light falls.
@@ -26,7 +28,7 @@ function Dust({ count = 1500, spread = [22, 20, 64], z0 = 4 }) {
         transparent: true,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
-        uniforms: { uTime: { value: 0 }, uSize: { value: 26 }, uColor: { value: new THREE.Color('#ffd49a') } },
+        uniforms: { uTime: { value: 0 }, uSize: { value: 26 }, uColor: { value: new THREE.Color(T.dust.color) } },
         vertexShader: `
           attribute float aSeed; uniform float uTime; uniform float uSize;
           varying float vTw;
@@ -80,12 +82,13 @@ function Shaft({ position, height = 22, top = 1.0, bottom = 4.6, color = '#ffe1a
 }
 
 export default function Atmosphere() {
+  const s = T.shaft
   return (
     <group>
-      <Dust />
-      <Shaft position={[-1.5, 11, 20]} />
-      <Shaft position={[2.0, 11, 2]} strength={0.2} />
-      <Shaft position={[-1.0, 11, -14]} strength={0.13} />
+      <Dust count={Math.round(T.dust.count * (LOW ? 0.35 : 1))} />
+      <Shaft position={[-1.5, 11, 20]} color={s.color} strength={s.strength} />
+      <Shaft position={[2.0, 11, 2]} color={s.color} strength={s.strength * 1.15} />
+      <Shaft position={[-1.0, 11, -14]} color={s.color} strength={s.strength * 0.75} />
     </group>
   )
 }

@@ -1,0 +1,43 @@
+.kb-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-content: center;
+  gap: 2.2rem;
+  text-align: center;
+  background: radial-gradient(ellipse at center, #15100a 0%, #070504 70%, #030201 100%);
+  transition: opacity 1.6s ease, visibility 1.6s ease;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+.kb-veil.is-gone {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.kb-veil__mark {
+  font-size: clamp(1.6rem, 1rem + 4vw, 3.2rem);
+  letter-spacing: 0.5em;
+  text-indent: 0.5em;
+  text-transform: uppercase;
+  color: #e6c074;
+  text-shadow: 0 0 26px rgba(220, 160, 70, 0.45);
+  animation: kb-gutter 4.5s ease-in-out infinite;
+}
+.kb-veil__hint {
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(190, 160, 110, 0.55);
+}
+
+@keyframes kb-gutter {
+  0%, 100% { opacity: 0.92; text-shadow: 0 0 26px rgba(220, 160, 70, 0.45); }
+  18% { opacity: 0.74; }
+  22% { opacity: 0.98; text-shadow: 0 0 40px rgba(240, 180, 90, 0.6); }
+  55% { opacity: 0.85; }
+  62% { opacity: 0.99; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kb-veil__mark { animation: none; }
+}

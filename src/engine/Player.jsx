@@ -22,6 +22,8 @@ export default function Player() {
   const vy = useRef(0)
   const keys = useRef({ f: 0, b: 0, l: 0, r: 0, run: 0 })
   const drag = useRef({ on: false, x: 0, y: 0 })
+  const intro = useRef(0) // arrival settle timer
+  const INTRO = 3.6
 
   const p = useControls({
     movement: folder({
@@ -101,8 +103,13 @@ export default function Player() {
     const b = body.current
     if (!b || !cc.current) return
 
-    const fwd = keys.current.f - keys.current.b
-    const strafe = keys.current.r - keys.current.l
+    // arrival: lock movement early, let the camera settle from above/behind
+    intro.current = Math.min(INTRO, intro.current + dt)
+    const introK = THREE.MathUtils.smoothstep(intro.current / INTRO, 0, 1)
+    const locked = intro.current < INTRO * 0.55
+
+    const fwd = locked ? 0 : keys.current.f - keys.current.b
+    const strafe = locked ? 0 : keys.current.r - keys.current.l
     const sy = Math.sin(yaw.current)
     const cy = Math.cos(yaw.current)
     // heading H=(sy,cy); right R=(cy,-sy)
@@ -129,8 +136,9 @@ export default function Player() {
     b.setNextKinematicTranslation({ x: nx, y: ny, z: nz })
     if (cc.current.computedGrounded()) vy.current = 0
 
-    // damped camera with slight overshoot for inertial life
-    camTarget.set(nx, ny + p.eyeOffset, nz)
+    // damped camera with slight overshoot for inertial life; the arrival offset
+    // starts the camera higher and further back, then settles to the eye.
+    camTarget.set(nx, ny + p.eyeOffset + (1 - introK) * 5.5, nz + (1 - introK) * 9)
     const a = 1 - Math.exp(-p.camDamp * dt)
     camera.position.lerp(camTarget, a * (1 + p.overshoot))
     const cp = Math.cos(pitch.current)

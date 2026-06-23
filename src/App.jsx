@@ -11,8 +11,12 @@ import Colliders from './engine/Colliders.jsx'
 import Inspectables from './inspect/Inspectables.jsx'
 import Hud from './ui/Hud.jsx'
 import MinigameLayer from './ui/MinigameLayer.jsx'
+import ArrivalVeil from './ui/ArrivalVeil.jsx'
+import AudioBoot from './audio/AudioBoot.jsx'
 import { useUI } from './state/store.js'
 import { chapters } from './copy.js'
+import { T } from './render/treatments.js'
+import { LOW } from './util/env.js'
 
 // Harness mode: static scene with a scriptable camera (no controller) so the
 // screenshot harness can frame fixed vantages. Live mode: full free-roam.
@@ -62,19 +66,23 @@ export default function App() {
       <Leva hidden={HARNESS} collapsed />
       <Hud />
       <MinigameLayer />
+      {!HARNESS && <ArrivalVeil />}
       <Canvas
-        gl={{ antialias: true, powerPreference: 'high-performance' }}
+        dpr={LOW ? 1 : [1, 2]}
+        gl={{ antialias: !LOW, powerPreference: 'high-performance' }}
         camera={{ position: [0, 1.7, 44], fov: 64, near: 0.1, far: 240 }}
         onCreated={({ scene, gl }) => {
-          scene.fog = new THREE.FogExp2(0x07060a, 0.02)
-          gl.setClearColor(0x07060a, 1)
+          // low tier: limit draw distance with denser fog so far geometry culls
+          scene.fog = new THREE.FogExp2(T.fogColor, LOW ? T.fogDensity * 1.6 : T.fogDensity)
+          gl.setClearColor(T.fogColor, 1)
           gl.toneMapping = THREE.ACESFilmicToneMapping
-          gl.toneMappingExposure = 1.05
+          gl.toneMappingExposure = T.exposure
         }}
       >
         <Bridge shots={SHOTS} />
         <Hall />
         <Atmosphere />
+        {!HARNESS && <AudioBoot />}
         {!HARNESS && (
           <Physics gravity={[0, 0, 0]}>
             <Player />
@@ -82,10 +90,12 @@ export default function App() {
             <Inspectables />
           </Physics>
         )}
-        <EffectComposer>
-          <Bloom intensity={1.1} luminanceThreshold={0.5} luminanceSmoothing={0.4} mipmapBlur radius={0.7} />
-          <Vignette offset={0.28} darkness={0.92} />
-        </EffectComposer>
+        {!LOW && (
+          <EffectComposer>
+            <Bloom intensity={T.bloom.intensity} luminanceThreshold={T.bloom.threshold} luminanceSmoothing={0.4} mipmapBlur radius={T.bloom.radius} />
+            <Vignette offset={0.28} darkness={T.vignette} />
+          </EffectComposer>
+        )}
       </Canvas>
     </>
   )
