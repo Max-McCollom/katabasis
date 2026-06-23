@@ -6,7 +6,7 @@
 import puppeteer from 'puppeteer-core'
 
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-const URL = process.env.URL || 'http://localhost:5173/'
+const URL = process.env.URL || 'http://localhost:5173/?harness=1'
 const OUT = process.env.OUT || '.'
 const TAG = process.env.TAG || 'shot'
 const W = +(process.env.W || 1280)

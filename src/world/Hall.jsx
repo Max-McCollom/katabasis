@@ -4,18 +4,10 @@ import { useFrame } from '@react-three/fiber'
 import { flutedColumnGeometry, archRingGeometry, radialTexture } from './geometry.js'
 import { makeMatcapSet } from '../render/matcaps.js'
 import { makeEstateMatcap } from '../render/estateMaterial.js'
+import { BAYS, COL_X, COL_H, WALL_X, zNear, zFar, len, midZ, CANDLES } from './layout.js'
 
-const BAYS = [28, 20, 12, 4, -4, -12, -20] // z of each bay, receding
-const COL_X = 6.4
-const COL_H = 16
 const SPRING = COL_H // arches spring from the column tops
-
-// Candle points: two per bay, mid-height. Shared by the glow sprites AND the
-// fake-bounce material so flames actually pool light onto the architecture.
-export const CANDLES = BAYS.flatMap((z) => [
-  [-COL_X + 1.5, 5.5, z],
-  [COL_X - 1.5, 5.5, z],
-])
+export { CANDLES }
 
 export function useEstateMaterials() {
   return useMemo(() => {
@@ -95,13 +87,7 @@ export default function Hall() {
     const t = s.clock.elapsedTime
     for (const k in mat) mat[k].userData.uniforms.uTime.value = t
   })
-  const zNear = BAYS[0] + 6
-  const zFar = BAYS[BAYS.length - 1] - 6
-  const len = zNear - zFar
-  const midZ = (zNear + zFar) / 2
-
   const farArch = useMemo(() => archRingGeometry({ ri: 6.2, ro: 8.2, depth: 2.6 }), [])
-  const WALL_X = COL_X + 4.4
   const steps = useMemo(() => Array.from({ length: 12 }, (_, i) => i), [])
 
   return (

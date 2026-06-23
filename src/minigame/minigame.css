@@ -1,0 +1,105 @@
+.kb-game {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(ellipse at center, rgba(10, 7, 4, 0.82), rgba(3, 2, 1, 0.96));
+  pointer-events: auto;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  color: #e8dcc4;
+  animation: kb-fade 0.6s ease;
+}
+.kb-game__frame {
+  width: min(92vw, 30rem);
+  padding: 1.4rem 1.6rem 1.7rem;
+  border: 1px solid rgba(176, 138, 74, 0.4);
+  background: linear-gradient(180deg, rgba(22, 16, 10, 0.9), rgba(9, 7, 5, 0.95));
+  box-shadow: 0 0 90px rgba(180, 120, 50, 0.14) inset, 0 30px 80px rgba(0, 0, 0, 0.65);
+}
+.kb-game__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.kb-game__kicker {
+  font-size: 0.74rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: #c79a52;
+}
+.kb-game__x {
+  background: none;
+  border: none;
+  color: #b59a6e;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.kb-game__x:hover { color: #f0d9a8; }
+.kb-game__instr {
+  margin: 0.7rem 0 1rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #cdbd9e;
+}
+.kb-game__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+  min-height: 2.2rem;
+}
+.kb-game__turns { font-size: 0.8rem; letter-spacing: 0.16em; color: #9c8b6c; }
+.kb-game__win {
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  color: #f3d488;
+  text-shadow: 0 0 18px rgba(240, 190, 90, 0.5);
+}
+.kb-game__btn {
+  font: inherit;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #1a120a;
+  background: linear-gradient(180deg, #e6c074, #c79a52);
+  border: none;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+}
+.kb-game__btn.ghost {
+  color: #d8c49a;
+  background: transparent;
+  border: 1px solid rgba(190, 150, 80, 0.45);
+}
+.kb-game__btn:hover { filter: brightness(1.08); }
+
+/* the astrolabe */
+.kb-astro { width: 100%; height: auto; display: block; }
+.kb-astro__band {
+  fill: none;
+  stroke: rgba(150, 120, 70, 0.32);
+  stroke-width: 2;
+  cursor: pointer;
+}
+.kb-astro__ring:hover .kb-astro__band { stroke: rgba(220, 180, 110, 0.7); }
+.kb-astro__ring { transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1); }
+.kb-astro__tick circle { fill: rgba(150, 120, 70, 0.4); }
+.kb-astro__mark circle { fill: #e9c074; filter: drop-shadow(0 0 6px rgba(233, 192, 116, 0.8)); }
+.kb-astro__glyph {
+  fill: #2a1c0c;
+  font-size: 8px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+.kb-astro__target { fill: #f0d488; filter: drop-shadow(0 0 6px rgba(240, 200, 110, 0.8)); }
+.kb-astro__hub { fill: #15100a; stroke: rgba(176, 138, 74, 0.5); stroke-width: 1.5; }
+.kb-astro.is-solved .kb-astro__band { stroke: rgba(240, 200, 110, 0.85); }
+.kb-astro.is-solved .kb-astro__mark circle { fill: #fff0c8; filter: drop-shadow(0 0 12px rgba(255, 224, 150, 1)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-game { animation: none; }
+  .kb-astro__ring { transition: none; }
+}

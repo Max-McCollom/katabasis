@@ -1,0 +1,101 @@
+/* Estate UI: warm serif on darkness, tarnished-gilt accents. Legible contrast. */
+.kb-ui {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  color: #e8dcc4;
+}
+
+/* proximity prompt */
+.kb-prompt {
+  position: fixed;
+  left: 50%;
+  bottom: 12%;
+  transform: translateX(-50%);
+  padding: 0.5rem 1.1rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: #d8c49a;
+  border: 1px solid rgba(190, 150, 80, 0.4);
+  background: rgba(12, 9, 6, 0.55);
+  backdrop-filter: blur(2px);
+  pointer-events: none;
+  animation: kb-fade 0.4s ease;
+}
+
+/* reading panel (frozen copy) */
+.kb-read {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(ellipse at center, rgba(8, 6, 4, 0.55) 0%, rgba(4, 3, 2, 0.9) 80%);
+  pointer-events: auto;
+  animation: kb-fade 0.7s ease;
+}
+.kb-read__panel {
+  max-width: 40rem;
+  margin: 1.5rem;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid rgba(176, 138, 74, 0.35);
+  background: linear-gradient(180deg, rgba(20, 15, 10, 0.86), rgba(10, 8, 6, 0.92));
+  box-shadow: 0 0 80px rgba(180, 120, 50, 0.12) inset, 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+.kb-read__num {
+  font-size: 0.78rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: #c79a52;
+}
+.kb-read__title {
+  font-size: clamp(1.6rem, 1rem + 3vw, 2.6rem);
+  margin: 0.4rem 0 1.4rem;
+  letter-spacing: -0.01em;
+  color: #f0e6d2;
+}
+.kb-read__body p {
+  margin: 0 0 1rem;
+  line-height: 1.7;
+  color: #d9cdb6;
+  font-size: 1.04rem;
+}
+.kb-read__close {
+  margin-top: 1.4rem;
+  font: inherit;
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #d8c49a;
+  background: transparent;
+  border: 1px solid rgba(190, 150, 80, 0.45);
+  padding: 0.55rem 1.2rem;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.kb-read__close:hover {
+  border-color: rgba(220, 180, 110, 0.8);
+  color: #fff0d6;
+}
+
+.kb-key {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.4em;
+  margin-left: 0.5em;
+  padding: 0.1em 0.3em;
+  border: 1px solid rgba(200, 160, 90, 0.5);
+  border-radius: 3px;
+  color: #f0d9a8;
+  font-size: 0.9em;
+}
+
+@keyframes kb-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kb-prompt, .kb-read { animation: none; }
+}
