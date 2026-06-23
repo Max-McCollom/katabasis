@@ -1,4 +1,4 @@
-# Editorial review — run before every publish
+# Editorial review: run before every publish
 
 A human pass against the proprietary boundary. Automation enforces the
 allowlist; it cannot judge prose. This can. Every box must be checked. Any
