@@ -1,0 +1,21 @@
+# Build output and tooling
+node_modules/
+dist/
+.vite/
+
+# The local operating manual is never published: the public repo contains only
+# the site. It also names the trading system, which the sentinel scan blocks.
+CLAUDE.md
+
+# Source maps must never ship; they embed local paths and directory structure.
+# (Belt to the allowlist's braces; the allowlist is the real control.)
+*.map
+
+# Secrets / environment
+.env
+.env.*
+
+# OS / editor cruft
+.DS_Store
+*.log
+Thumbs.db

@@ -1,0 +1,30 @@
+# Katabasis repository allowlist  (default-deny)
+# ---------------------------------------------------------------------------
+# Nothing may be committed unless it is permitted here. See section 2 of the
+# build brief. Enforced by .githooks/pre-commit (the local gate) and re-run by
+# CI (a backstop). Two rule kinds:
+#
+#   file:<exact path>                 one individually permitted file
+#   dir:<prefix>:<ext> [ext ...]      files under <prefix> with these
+#                                     extensions ( * = any extension )
+#
+# Adding a line here is a deliberate act. If you are unsure whether a file
+# belongs in a public repository, it does not go here.
+
+# -- individual root files --------------------------------------------------
+file:.allowlist
+file:.gitattributes
+file:.gitignore
+file:README.md
+file:package.json
+file:package-lock.json
+file:vite.config.js
+file:index.html
+file:public/CNAME
+
+# -- source and assets ------------------------------------------------------
+dir:src/:html css js svg
+dir:public/:svg png jpg jpeg webp avif ico woff2 mp4 webm vtt xml txt
+dir:docs/:md
+dir:.github/workflows/:yml
+dir:.githooks/:*

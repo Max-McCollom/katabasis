@@ -1,0 +1,20 @@
+#!/bin/sh
+# Katabasis pre-commit gate.
+#
+# Enforces the allowlist on staged files. This is the load-bearing local
+# control: on a public repo the commit is already public by the time CI runs,
+# so the gate must sit here, before the commit lands. Bypassable with
+# --no-verify; the real wall is isolation + allowlist + a sealed build.
+set -eu
+
+ROOT="$(git rev-parse --show-toplevel)"
+staged="$(git diff --cached --name-only --diff-filter=ACM)"
+
+if [ -z "$staged" ]; then
+  exit 0
+fi
+
+echo "katabasis: checking staged files against .allowlist ..."
+# Word-splitting is intentional: one path per argument.
+# shellcheck disable=SC2086
+exec "$ROOT/.githooks/allowlist-check.sh" $staged
