@@ -28,7 +28,13 @@ function scramble() {
 
 export default function Astrolabe() {
   const exitGame = useUI((s) => s.exitGame)
-  const [vals, setVals] = useState(scramble)
+  const [vals, setVals] = useState(() => {
+    try {
+      // test seed: one coupled turn of ring 0 from solved (harness verifies win)
+      if (new URLSearchParams(window.location.search).has('solve')) return [7, 7, 0, 0]
+    } catch {}
+    return scramble()
+  })
   const [turns, setTurns] = useState(0)
   const solved = useMemo(() => vals.every((v) => v === 0), [vals])
 

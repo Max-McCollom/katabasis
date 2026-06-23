@@ -38,6 +38,7 @@ function Bridge({ shots }) {
         camera.lookAt(tx, ty, tz)
         camera.updateMatrixWorld()
       },
+      getCam: () => camera.position.toArray(),
       // harness hooks for verifying the DOM layers
       demoRead: () => {
         const c = chapters[0]
