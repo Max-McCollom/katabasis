@@ -48,3 +48,40 @@ iterated room + honest report}, never {great plumbing, nothing rendering}.
 ## Boundary
 Abstract/atmospheric only. Frozen copy surfaced verbatim (copy lives in
 `src/copy.js`; verbatim check adapted there). Nothing proprietary.
+
+## Phase: Bruno study + Blender bake pipeline
+
+### Adopted from brunosimon/folio-2019 (studied via the public repo)
+- **Indirect tint (the lighting illusion).** Bruno's matcap blends toward a warm
+  `uIndirectColor` (#d04500) by `distanceTerm * angleTerm`, where distance =
+  height above floor and angle = how much the normal faces DOWN. We adopted the
+  down-facing-normal term into our fake-bounce (`src/render/estateMaterial.js`):
+  warm bounce now concentrates on down-facing soffits near the floor (under
+  capitals, beams, arch undersides) as real radiosity would.
+- **Camera:** Bruno's per-tick lerp (`easing 0.15/0.1/0.1`) is frame-rate
+  DEPENDENT (no dt term). Ours already uses `1 - exp(-k*dt)`, which is the exact
+  fix his lacks; kept ours.
+- **Reveal:** his click-gated geometry-rises-from-floor reveal (single 0->1 GSAP
+  uniform, sub-floor discard) is noted as a future upgrade to our veil+settle.
+- Honest: the repo is the shipped ENGINE/shaders, NOT the Blender modeling
+  source; the hand-built art lived in .blend files, not the code.
+
+### Blender pipeline (Blender 5.1.2, headless, OPERATES)
+- `blender/build_hall.py` generates the colonnade procedurally (fluted columns,
+  bases, capitals, entablature, voussoir arches, floor, walls) at the layout.js
+  coordinates, smart-UV + lightmap-pack UV2, bakes in Cycles, exports glb.
+- Two bakes: COMBINED (albedo x candle GI x AO -> the dramatic look) and a pure
+  AO pass. ~20s at 256 samples / 2048 lightmap.
+- gltf-transform: Draco geometry + WebP textures -> **972 KB to 74 KB (13x)**.
+- **KTX2 gap (honest):** `toktx` / KTX-Software is not installed, so KTX2
+  (ETC1S/UASTC) encoding is unavailable; WebP is used as the texture fallback.
+  Fix: `brew install ktx` (or download KTX-Software), then `gltf-transform` can
+  emit KTX2.
+- **Baked-vs-matcap verdict (honest):** baked GI gives real Dore chiaroscuro +
+  AO and clearly beats matcap for establishing/dramatic views (see before/after
+  shots, ?baked). At the visitor's eye-level POV the DIRECTIONAL baked light
+  reads darker than the omnidirectional matcap (grazing angles, inherent). So
+  the default keeps the (now indirect-tint-improved) matcap for readability;
+  the baked hall is wired and demonstrated via `?baked`. Baked-as-universal-
+  default needs the Blender candle light-rig tuned for eye-level readability:
+  a tuning pass, not a pipeline gap.

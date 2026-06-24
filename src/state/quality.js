@@ -36,4 +36,8 @@ export const useQuality = create((set) => ({
       const level = clamp(s.level - 1)
       return { level, ...LEVELS[level] }
     }),
+  setLevel: (n) => {
+    const level = clamp(n)
+    set({ level, ...LEVELS[level] })
+  },
 }))

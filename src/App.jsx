@@ -4,6 +4,8 @@ import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import { Leva } from 'leva'
 import * as THREE from 'three'
 import Hall from './world/Hall.jsx'
+import BakedHall from './world/BakedHall.jsx'
+import ExternalModel from './world/ExternalModel.jsx'
 import Descent from './world/Descent.jsx'
 import Atmosphere from './world/Atmosphere.jsx'
 import DepthGrade from './world/DepthGrade.jsx'
@@ -23,7 +25,9 @@ import { chapters } from './copy.js'
 import { T } from './render/treatments.js'
 import { LOW } from './util/env.js'
 
-const HARNESS = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('harness')
+const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams()
+const HARNESS = params.has('harness')
+const BAKED = params.has('baked') // A/B: Blender-baked hall vs matcap hall
 
 function Bridge({ shots }) {
   const { gl, camera } = useThree()
@@ -51,6 +55,12 @@ function Bridge({ shots }) {
         useUI.getState().closeRead()
         useUI.getState().exitGame()
       },
+      // harness hook: force a quality level and apply the dpr cap (FPS-degrade test)
+      forceQuality: (n) => {
+        useQuality.getState().setLevel(n)
+        gl.setPixelRatio(Math.min(window.devicePixelRatio, useQuality.getState().dpr))
+      },
+      quality: () => useQuality.getState(),
     }
   }, [gl, camera, shots])
   return null
@@ -61,7 +71,8 @@ const SHOTS = {
   eye: [0, 1.7, 40, 0, 5, -22],
   descent: [0, 2, -29, 0, -11, -50],
   landing: [0, -9, -50, 0, -12, -62],
-  shaft: [0, -10.5, -61, 2, -32, -72],
+  arrival: [0, -10.4, -61.5, 0, -14, -90],
+  shaft: [-4, -10.5, -61, 3, -34, -82],
   detail: [11, 4.5, 28, 0, 6, 22],
 }
 
@@ -89,7 +100,11 @@ export default function App() {
         }}
       >
         <Bridge shots={SHOTS} />
-        <Hall />
+        <React.Suspense fallback={null}>{BAKED ? <BakedHall /> : <Hall />}</React.Suspense>
+        {/* hand-model handoff slot: drop a glb into public/models/ (see docs/ASSET_PIPELINE.md) */}
+        <React.Suspense fallback={null}>
+          <ExternalModel url="/models/placeholder.glb" position={[0, 0, 14]} />
+        </React.Suspense>
         <Descent />
         <Atmosphere />
         <DepthGrade />

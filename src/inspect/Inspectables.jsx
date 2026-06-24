@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useUI } from '../state/store.js'
 import { useProgress } from '../state/progress.js'
+import { playInspect } from '../audio/cues.js'
 import { getEstateMaterials } from '../render/estateMaterials.js'
 import { chapters } from '../copy.js'
 import { radialTexture } from '../world/geometry.js'
@@ -111,8 +112,7 @@ export default function Inspectables() {
   const mat = getEstateMaterials()
 
   useEffect(() => {
-    const onKey = (e) => {
-      if (e.code !== 'KeyE') return
+    const trigger = () => {
       const st = useUI.getState()
       if (st.paused) return
       const item = LIST.find((l) => l.id === st.near?.id)
@@ -120,10 +120,24 @@ export default function Inspectables() {
       if (item.kind === 'read') {
         st.read(item.payload)
         useProgress.getState().markRead(item.payload.id)
+        playInspect()
       } else st.launch(item.gameId)
     }
+    const onKey = (e) => e.code === 'KeyE' && trigger()
+    // tap / click to inspect (mobile + desktop): a press that doesn't drag
+    let dx = 0, dy = 0, dt = 0
+    const pd = (e) => ((dx = e.clientX), (dy = e.clientY), (dt = performance.now()))
+    const pu = (e) => {
+      if (Math.hypot(e.clientX - dx, e.clientY - dy) < 10 && performance.now() - dt < 400) trigger()
+    }
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('pointerdown', pd)
+    window.addEventListener('pointerup', pu)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('pointerdown', pd)
+      window.removeEventListener('pointerup', pu)
+    }
   }, [])
 
   useFrame((_, dt) => {

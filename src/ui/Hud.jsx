@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useUI } from '../state/store.js'
+import { useProgress } from '../state/progress.js'
 import './overlay.css'
 
 // DOM overlays: the proximity prompt and the frozen-copy reading panel. Kept out
@@ -9,6 +10,9 @@ export default function Hud() {
   const near = useUI((s) => s.near)
   const reading = useUI((s) => s.reading)
   const closeRead = useUI((s) => s.closeRead)
+  const read = useProgress((s) => s.read)
+  const solved = useProgress((s) => s.solved)
+  const allSeen = read.threshold && read.descent && solved.astrolabe && solved.braziers
 
   useEffect(() => {
     if (!reading) return
@@ -19,6 +23,7 @@ export default function Hud() {
 
   return (
     <div className="kb-ui">
+      {allSeen && !reading && <div className="kb-seen">The estate is read, end to end.</div>}
       {near && !reading && (
         <div className="kb-prompt">
           {near.prompt || 'Inspect'} <span className="kb-key">E</span>

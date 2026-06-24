@@ -80,6 +80,20 @@
   color: #fff0d6;
 }
 
+.kb-seen {
+  position: fixed;
+  left: 50%;
+  top: 7%;
+  transform: translateX(-50%);
+  font-size: 0.74rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: #e0b463;
+  text-shadow: 0 0 22px rgba(220, 160, 70, 0.45);
+  pointer-events: none;
+  animation: kb-fade 1.4s ease;
+}
+
 .kb-key {
   display: inline-grid;
   place-items: center;

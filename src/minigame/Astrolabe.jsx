@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react'
 import { useUI } from '../state/store.js'
 import { useProgress } from '../state/progress.js'
+import { playSolve } from '../audio/cues.js'
 import './minigame.css'
 
 // THE ASTROLABE LOCK. Concentric rings, each with one mark. Turning a ring also
@@ -39,7 +40,10 @@ export default function Astrolabe() {
   const [turns, setTurns] = useState(0)
   const solved = useMemo(() => vals.every((v) => v === 0), [vals])
   useEffect(() => {
-    if (solved) useProgress.getState().markSolved('astrolabe')
+    if (solved) {
+      useProgress.getState().markSolved('astrolabe')
+      playSolve()
+    }
   }, [solved])
 
   const turn = useCallback(

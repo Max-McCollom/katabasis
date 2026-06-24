@@ -18,7 +18,9 @@ export default function TouchControls() {
     id.current = e.pointerId
     const r = base.current.getBoundingClientRect()
     center.current = { x: r.left + r.width / 2, y: r.top + r.height / 2 }
-    base.current.setPointerCapture?.(e.pointerId)
+    try {
+      base.current.setPointerCapture?.(e.pointerId)
+    } catch {}
     move(e)
   }
   const move = (e) => {

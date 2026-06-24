@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react'
 import { useUI } from '../state/store.js'
 import { useProgress } from '../state/progress.js'
+import { playSolve } from '../audio/cues.js'
 import './minigame.css'
 import './braziers.css'
 
@@ -74,7 +75,10 @@ export default function Braziers() {
   const [turns, setTurns] = useState(0)
   const solved = useMemo(() => lit.every((v) => v), [lit])
   useEffect(() => {
-    if (solved) useProgress.getState().markSolved('braziers')
+    if (solved) {
+      useProgress.getState().markSolved('braziers')
+      playSolve()
+    }
   }, [solved])
 
   const kindle = useCallback(

@@ -27,12 +27,13 @@ export function makeEstateMatcap(matcapTex, lights, opts = {}) {
 
   mat.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, uniforms)
-    shader.vertexShader = 'varying vec3 vWPos;\n' + shader.vertexShader.replace(
+    shader.vertexShader = 'varying vec3 vWPos;\nvarying vec3 vWNrm;\n' + shader.vertexShader.replace(
       '#include <begin_vertex>',
-      '#include <begin_vertex>\n  vWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;',
+      '#include <begin_vertex>\n  vWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;\n  vWNrm = normalize(mat3(modelMatrix) * objectNormal);',
     )
     shader.fragmentShader =
       `varying vec3 vWPos;
+       varying vec3 vWNrm;
        uniform vec3 uLights[${N}];
        uniform vec3 uWarm;
        uniform float uRange;
@@ -52,7 +53,11 @@ export function makeEstateMatcap(matcapTex, lights, opts = {}) {
            float fl = 0.84 + 0.16 * sin(uTime * 8.0 + lp.x * 3.1 + lp.z * 0.7);
            bounce += uWarm * exp(-(d * d) / (uRange * uRange)) * fl;
          }
-         bounce += uWarm * uFloor * smoothstep(9.0, 0.0, vWPos.y);
+         // Bruno-Simon indirect tint: warm floor-bounce concentrated on
+         // down-facing surfaces near the floor (under capitals, beams, arch
+         // soffits) where real radiosity from a warm floor would land.
+         float down = clamp(-vWNrm.y * 1.5 + 0.55, 0.0, 1.0);
+         bounce += uWarm * uFloor * smoothstep(9.0, 0.0, vWPos.y) * (0.35 + 1.0 * down);
          ${
            floor
              ? `float gx = abs(fract(vWPos.x / ${flagSize.toFixed(1)}) - 0.5);

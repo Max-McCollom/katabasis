@@ -55,43 +55,49 @@ export default function Descent() {
           <boxGeometry args={[1.6, 64, DESC_TOP_Z - DESC_BACK_Z + 6]} />
         </mesh>
       ))}
-      {/* back wall far down the shaft, with an arch into deeper black */}
-      <mesh position={[0, -22, DESC_BACK_Z]} material={mat.stone}>
-        <boxGeometry args={[2 * DESC_WALL_X, 56, 1.4]} />
+      {/* back wall deep down the shaft, with a glowing arch into deeper black */}
+      <mesh position={[0, -30, DESC_BACK_Z]} material={mat.stone}>
+        <boxGeometry args={[2 * DESC_WALL_X, 80, 1.4]} />
       </mesh>
-      <mesh position={[0, -30, DESC_BACK_Z + 0.9]} geometry={farArch} material={mat.brass} />
+      <mesh position={[0, -34, DESC_BACK_Z + 0.9]} geometry={farArch} material={mat.brass} />
 
-      {/* UNCANNY: pendant columns hanging into the void, reaching no floor */}
+      {/* UNCANNY: bridges crossing the shaft, receding into the deep AHEAD of the
+          arriving visitor, at and below eye level so the vertiginous scale reads
+          on the forward eye-line, not only when you look down. */}
       {[
-        [-6, -12, BALCONY_Z - 6],
-        [6, -16, BALCONY_Z - 12],
-        [0, -20, BALCONY_Z - 20],
-        [-7, -26, BALCONY_Z - 24],
+        [-2, BALCONY_Z - 4, 0.1, 0.03],
+        [-8, BALCONY_Z - 13, -0.14, -0.04],
+        [-16, BALCONY_Z - 22, 0.22, 0.03],
+        [-25, BALCONY_Z - 31, -0.3, -0.05],
+        [-34, BALCONY_Z - 40, 0.4, 0.04],
+      ].map(([y, z, ry, rz], i) => (
+        <mesh key={'br' + i} position={[0, y, z]} rotation={[0, ry, rz]} material={mat.stone}>
+          <boxGeometry args={[2 * DESC_WALL_X + 7, 0.8, 2.3]} />
+        </mesh>
+      ))}
+
+      {/* UNCANNY: pendant columns hanging from the dark, receding ahead, reaching
+          no floor. An impossible colonnade folded into the shaft. */}
+      {[
+        [-6.5, -10, BALCONY_Z - 8],
+        [6.5, -14, BALCONY_Z - 16],
+        [0, -16, BALCONY_Z - 20],
+        [-6.5, -20, BALCONY_Z - 28],
+        [6.5, -25, BALCONY_Z - 38],
       ].map((p, i) => (
         <mesh key={'pd' + i} geometry={pendant} material={mat.stone} position={p} rotation={[Math.PI, 0, 0]} />
       ))}
 
-      {/* UNCANNY: bridges crossing the shaft at wrong angles, deep down */}
-      <mesh position={[0, -19, BALCONY_Z - 10]} rotation={[0, 0.5, 0.04]} material={mat.stone}>
-        <boxGeometry args={[2 * DESC_WALL_X + 6, 0.7, 2.4]} />
-      </mesh>
-      <mesh position={[0, -28, BALCONY_Z - 18]} rotation={[0, -0.7, -0.05]} material={mat.stone}>
-        <boxGeometry args={[2 * DESC_WALL_X + 8, 0.7, 2.2]} />
-      </mesh>
-      <mesh position={[1, -37, BALCONY_Z - 26]} rotation={[0.04, 0.3, 0]} material={mat.stone}>
-        <boxGeometry args={[2 * DESC_WALL_X + 4, 0.7, 2.0]} />
-      </mesh>
-
       {/* UNCANNY: an Escher stair climbing a side wall to nowhere */}
       {escher.map((i) => (
-        <mesh key={'es' + i} position={[-DESC_WALL_X + 1.5, -18 + i * 0.9, BALCONY_Z - 4 - i * 1.1]} rotation={[0, 0.25, 0]} material={mat.stone}>
+        <mesh key={'es' + i} position={[-DESC_WALL_X + 1.4, -16 + i * 0.9, BALCONY_Z - 6 - i * 1.1]} rotation={[0, 0.25, 0]} material={mat.stone}>
           <boxGeometry args={[3.2, 0.45, 1.2]} />
         </mesh>
       ))}
 
       {/* dim candles of the descent (colder, sparser than the hall) */}
       {DESCENT_CANDLES.map((p, i) => (
-        <Candle key={'dc' + i} position={p} intensity={0.4} />
+        <Candle key={'dc' + i} position={p} intensity={0.3} />
       ))}
     </group>
   )

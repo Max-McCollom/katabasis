@@ -113,9 +113,10 @@ export default function Atmosphere() {
       <Shaft position={[-1.5, 11, 20]} color={s.color} strength={s.strength} />
       <Shaft position={[2.0, 11, 2]} color={s.color} strength={s.strength * 1.15} />
       <Shaft position={[-1.0, 11, -14]} color={s.color} strength={s.strength * 0.75} />
-      {/* descent: deeper, colder dust + a cold shaft falling into the void */}
-      <Dust count={Math.round(T.dust.count * 0.7 * m)} spread={[20, 44, 28]} z0={-56} y0={-44} color={'#9fb0c8'} />
-      <Shaft position={[1, -20, -56]} height={44} top={1.4} bottom={6.2} color={'#a8c0e8'} strength={s.strength * 1.25} />
+      {/* descent: deeper, colder dust + a cold shaft falling through the shaft
+          AHEAD, lighting the crossing bridges the arriving visitor faces */}
+      <Dust count={Math.round(T.dust.count * 0.8 * m)} spread={[20, 54, 34]} z0={-74} y0={-50} color={'#9fb0c8'} />
+      <Shaft position={[0, -24, -74]} height={56} bottom={6.6} color={'#a8c0e8'} strength={s.strength * 1.35} />
     </group>
   )
 }

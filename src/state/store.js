@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { playClose } from '../audio/cues.js'
 
 // UI / interaction state shared between the 3D world and the DOM overlays.
 export const useUI = create((set) => ({
@@ -9,7 +10,13 @@ export const useUI = create((set) => ({
 
   setNear: (id) => set((s) => (s.near === id ? s : { near: id })),
   read: (payload) => set({ reading: payload, paused: true }),
-  closeRead: () => set({ reading: null, paused: false }),
+  closeRead: () => {
+    playClose()
+    set({ reading: null, paused: false })
+  },
   launch: (id) => set({ game: id, reading: null, paused: true }),
-  exitGame: () => set({ game: null, paused: false }),
+  exitGame: () => {
+    playClose()
+    set({ game: null, paused: false })
+  },
 }))
