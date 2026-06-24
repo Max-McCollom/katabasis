@@ -6,9 +6,9 @@ import { create } from 'zustand'
 // reactively (post gates the EffectComposer, dpr caps the pixel ratio, fogMul
 // shortens draw distance, dustMul thins the dust).
 //
-//   level 0 — full:   post on,  dpr cap 2,    fog x1,   dust x1
-//   level 1 — reduced: post off, dpr cap 1.25, fog x1.2, dust x0.6
-//   level 2 — minimal: post off, dpr cap 1,    fog x1.5, dust x0.3
+//   level 0 : full:   post on,  dpr cap 2,    fog x1,   dust x1
+//   level 1 : reduced: post off, dpr cap 1.25, fog x1.2, dust x0.6
+//   level 2 : minimal: post off, dpr cap 1,    fog x1.5, dust x0.3
 const LEVELS = [
   { post: true, dpr: 2, fogMul: 1, dustMul: 1 },
   { post: false, dpr: 1.25, fogMul: 1.2, dustMul: 0.6 },

@@ -5,6 +5,7 @@ import { RigidBody, CapsuleCollider, useRapier } from '@react-three/rapier'
 import { useControls, folder } from 'leva'
 import { SPAWN } from '../world/layout.js'
 import { useUI } from '../state/store.js'
+import { touch } from './touchInput.js'
 
 const lookAtP = new THREE.Vector3()
 const camTarget = new THREE.Vector3()
@@ -108,21 +109,20 @@ export default function Player() {
     const introK = THREE.MathUtils.smoothstep(intro.current / INTRO, 0, 1)
     const locked = intro.current < INTRO * 0.55
 
-    const fwd = locked ? 0 : keys.current.f - keys.current.b
-    const strafe = locked ? 0 : keys.current.r - keys.current.l
+    // keyboard (digital) + joystick (analog), clamped so diagonals/analog never
+    // exceed full speed. heading H=(sin,cos); right R=(-cos,sin) so facing -Z, D moves +X.
+    let fIn = locked ? 0 : keys.current.f - keys.current.b + touch.my
+    let sIn = locked ? 0 : keys.current.r - keys.current.l + touch.mx
+    const mag = Math.hypot(fIn, sIn)
+    if (mag > 1) {
+      fIn /= mag
+      sIn /= mag
+    }
     const sy = Math.sin(yaw.current)
     const cy = Math.cos(yaw.current)
-    // heading H=(sin,cos); right R=(-cos,sin) so that facing -Z, D moves +X
-    let mvx = sy * fwd - cy * strafe
-    let mvz = cy * fwd + sy * strafe
-    const m = Math.hypot(mvx, mvz)
-    const speed = p.speed * (keys.current.run ? p.runMult : 1) * dt
-    if (m > 1e-4) {
-      mvx = (mvx / m) * speed
-      mvz = (mvz / m) * speed
-    } else {
-      mvx = mvz = 0
-    }
+    const step = p.speed * (keys.current.run ? p.runMult : 1) * dt
+    let mvx = (sy * fIn - cy * sIn) * step
+    let mvz = (cy * fIn + sy * sIn) * step
     vy.current -= p.gravity * dt
     const my = vy.current * dt
 

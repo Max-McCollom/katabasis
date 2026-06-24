@@ -1,20 +1,21 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, lazy, Suspense } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
-import { Physics } from '@react-three/rapier'
 import { Leva } from 'leva'
 import * as THREE from 'three'
 import Hall from './world/Hall.jsx'
 import Descent from './world/Descent.jsx'
 import Atmosphere from './world/Atmosphere.jsx'
 import DepthGrade from './world/DepthGrade.jsx'
-import Player from './engine/Player.jsx'
-import Colliders from './engine/Colliders.jsx'
 import AdaptiveQuality from './engine/AdaptiveQuality.jsx'
-import Inspectables from './inspect/Inspectables.jsx'
 import Hud from './ui/Hud.jsx'
+
+// Code-split: the Rapier-dependent interaction layer (and its WASM) loads after
+// first paint, hidden behind the arrival veil. Drops the initial bundle hard.
+const PhysicsWorld = lazy(() => import('./engine/PhysicsWorld.jsx'))
 import MinigameLayer from './ui/MinigameLayer.jsx'
 import ArrivalVeil from './ui/ArrivalVeil.jsx'
+import TouchControls from './ui/TouchControls.jsx'
 import AudioBoot from './audio/AudioBoot.jsx'
 import { useUI } from './state/store.js'
 import { useQuality } from './state/quality.js'
@@ -75,6 +76,7 @@ export default function App() {
       <Hud />
       <MinigameLayer />
       {!HARNESS && <ArrivalVeil />}
+      {!HARNESS && <TouchControls />}
       <Canvas
         dpr={LOW ? 1 : [1, 2]}
         gl={{ antialias: !LOW, powerPreference: 'high-performance' }}
@@ -94,11 +96,9 @@ export default function App() {
         {!HARNESS && <AudioBoot />}
         {!HARNESS && <AdaptiveQuality />}
         {!HARNESS && (
-          <Physics gravity={[0, 0, 0]}>
-            <Player />
-            <Colliders />
-            <Inspectables />
-          </Physics>
+          <Suspense fallback={null}>
+            <PhysicsWorld />
+          </Suspense>
         )}
         {post && (
           <EffectComposer>

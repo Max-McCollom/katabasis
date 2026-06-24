@@ -38,7 +38,11 @@ export function makeEstateMatcap(matcapTex, lights, opts = {}) {
        uniform float uRange;
        uniform float uStrength;
        uniform float uFloor;
-       uniform float uTime;\n` +
+       uniform float uTime;
+       float kbHash(vec3 p){ p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
+       float kbN(vec3 x){ vec3 i = floor(x), f = fract(x); f = f*f*(3.0-2.0*f);
+         return mix(mix(mix(kbHash(i),kbHash(i+vec3(1,0,0)),f.x),mix(kbHash(i+vec3(0,1,0)),kbHash(i+vec3(1,1,0)),f.x),f.y),
+                    mix(mix(kbHash(i+vec3(0,0,1)),kbHash(i+vec3(1,0,1)),f.x),mix(kbHash(i+vec3(0,1,1)),kbHash(i+vec3(1,1,1)),f.x),f.y),f.z); }\n` +
       shader.fragmentShader.replace(
         '#include <fog_fragment>',
         `vec3 bounce = vec3(0.0);
@@ -58,6 +62,9 @@ export function makeEstateMatcap(matcapTex, lights, opts = {}) {
                 gl_FragColor.rgb *= mix(0.42, 1.0, grout) * wear;`
              : ''
          }
+         // tarnish: mottled aging on every surface, worked-surface density
+         float tar = kbN(vWPos * 0.55) * 0.6 + kbN(vWPos * 2.4) * 0.4;
+         gl_FragColor.rgb *= 0.74 + 0.26 * tar;
          gl_FragColor.rgb += gl_FragColor.rgb * bounce * uStrength + bounce * 0.1;
          #include <fog_fragment>`,
       )
