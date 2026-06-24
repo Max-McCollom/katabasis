@@ -2,83 +2,103 @@ import React, { useMemo, useRef, useEffect } from 'react'
 import * as THREE from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useUI } from '../state/store.js'
-import { makeMatcapSet } from '../render/matcaps.js'
-import { makeEstateMatcap } from '../render/estateMaterial.js'
-import { CANDLES } from '../world/layout.js'
+import { useProgress } from '../state/progress.js'
+import { getEstateMaterials } from '../render/estateMaterials.js'
 import { chapters } from '../copy.js'
 import { radialTexture } from '../world/geometry.js'
+import { DESC_LANDING_Y } from '../world/layout.js'
 
 const tmpFrom = new THREE.Vector3()
 
-// In-world inspectables. A lectern surfaces frozen copy diegetically; an orrery
-// launches the minigame. Proximity shows a prompt; E (or click) interacts. The
-// reading move draws the camera in cinematically (Player yields while paused).
+// Two copy inspectables (one per zone) + two minigame inspectables (one per
+// zone). Proximity shows a prompt; E (or click) interacts. The reading move
+// draws the camera in cinematically; the Player yields while paused.
+const DZ = -60 // descent landing z (near the balcony, where the player arrives)
+const ch = (i) => ({ id: chapters[i].id, numeral: chapters[i].numeral, title: chapters[i].title, paragraphs: chapters[i].paragraphs })
+
 const LIST = [
+  // hall
   {
-    id: 'lectern',
-    kind: 'read',
-    pos: [3.6, 0, 22],
-    prompt: 'Read the inscription',
-    focus: { from: [3.6, 1.65, 25.2], to: [3.6, 1.15, 22] },
-    payload: { id: chapters[0].id, numeral: chapters[0].numeral, title: chapters[0].title, paragraphs: chapters[0].paragraphs },
+    id: 'lectern1', model: 'lectern', kind: 'read', pos: [3.6, 0, 22], prompt: 'Read the inscription',
+    focus: { from: [3.6, 1.65, 25.2], to: [3.6, 1.15, 22] }, payload: ch(0),
   },
-  { id: 'orrery', kind: 'game', pos: [-3.8, 0, 2], prompt: 'Work the mechanism', gameId: 'astrolabe' },
+  { id: 'orrery', model: 'orrery', kind: 'game', pos: [-3.8, 0, 2], prompt: 'Work the mechanism', gameId: 'astrolabe' },
+  // descent landing
+  {
+    id: 'lectern2', model: 'lectern', kind: 'read', pos: [-6, DESC_LANDING_Y, DZ], prompt: 'Read the inscription',
+    focus: { from: [-6, DESC_LANDING_Y + 1.6, DZ + 3.2], to: [-6, DESC_LANDING_Y + 1.0, DZ] }, payload: ch(1),
+  },
+  { id: 'brazier', model: 'brazier', kind: 'game', pos: [6, DESC_LANDING_Y, DZ], prompt: 'Tend the braziers', gameId: 'braziers' },
 ]
 
-function GlowMark({ on }) {
+function GlowMark({ on, done, y = 1.4 }) {
   const ref = useRef()
   const tex = useMemo(() => radialTexture({ inner: 'rgba(255,210,140,1)', outer: 'rgba(255,150,60,0)' }), [])
   useFrame((s) => {
     if (!ref.current) return
     const t = s.clock.elapsedTime
-    const base = on ? 2.4 : 1.5
-    ref.current.scale.setScalar(base * (0.9 + 0.1 * Math.sin(t * 5)))
-    ref.current.material.opacity = (on ? 0.9 : 0.5) * (0.85 + 0.15 * Math.sin(t * 7))
+    const base = on ? 2.6 : done ? 2.2 : 1.6
+    const fl = done ? 0.04 : 0.15 // steadier once completed
+    ref.current.scale.setScalar(base * (0.92 + fl * Math.sin(t * 5)))
+    ref.current.material.opacity = (on ? 0.95 : done ? 0.8 : 0.55) * (0.9 + fl * Math.sin(t * 7))
   })
   return (
-    <sprite ref={ref} position={[0, 1.4, 0]}>
-      <spriteMaterial map={tex} color={'#ffcf8a'} blending={THREE.AdditiveBlending} transparent depthWrite={false} />
+    <sprite ref={ref} position={[0, y, 0]}>
+      <spriteMaterial map={tex} color={done ? '#ffe6b4' : '#ffcf8a'} blending={THREE.AdditiveBlending} transparent depthWrite={false} />
     </sprite>
   )
 }
 
-function Lectern({ mat, near }) {
-  return (
-    <group position={LIST[0].pos}>
-      <mesh position={[0, 0.55, 0]} material={mat.stone}>
-        <boxGeometry args={[1.1, 1.1, 1.1]} />
-      </mesh>
-      <mesh position={[0, 1.25, 0]} rotation={[-0.5, 0, 0]} material={mat.brass}>
-        <boxGeometry args={[1.3, 0.12, 0.9]} />
-      </mesh>
-      <GlowMark on={near} />
-    </group>
-  )
-}
-
-function Orrery({ mat, near }) {
-  const ref = useRef()
-  useFrame((_, dt) => ref.current && (ref.current.rotation.y += dt * 0.25))
-  return (
-    <group position={LIST[1].pos}>
-      <mesh position={[0, 0.5, 0]} material={mat.stone}>
-        <cylinderGeometry args={[0.5, 0.7, 1.0, 16]} />
-      </mesh>
-      <group ref={ref} position={[0, 1.5, 0]}>
-        <mesh material={mat.brass}>
-          <torusGeometry args={[0.7, 0.035, 12, 48]} />
+function Model({ item, near, mat, done }) {
+  const spin = useRef()
+  useFrame((_, dt) => spin.current && (spin.current.rotation.y += dt * 0.25))
+  if (item.model === 'lectern') {
+    return (
+      <group position={item.pos}>
+        <mesh position={[0, 0.55, 0]} material={mat.stone}>
+          <boxGeometry args={[1.1, 1.1, 1.1]} />
         </mesh>
-        <mesh rotation={[Math.PI / 2, 0, 0]} material={mat.gilt}>
-          <torusGeometry args={[0.55, 0.03, 12, 48]} />
+        <mesh position={[0, 1.25, 0]} rotation={[-0.5, 0, 0]} material={mat.brass}>
+          <boxGeometry args={[1.3, 0.12, 0.9]} />
         </mesh>
-        <mesh rotation={[0.4, 0.7, 0]} material={mat.brass}>
-          <torusGeometry args={[0.42, 0.025, 12, 48]} />
-        </mesh>
-        <mesh material={mat.gilt}>
-          <icosahedronGeometry args={[0.12, 0]} />
-        </mesh>
+        <GlowMark on={near} done={done} />
       </group>
-      <GlowMark on={near} />
+    )
+  }
+  if (item.model === 'orrery') {
+    return (
+      <group position={item.pos}>
+        <mesh position={[0, 0.5, 0]} material={mat.stone}>
+          <cylinderGeometry args={[0.5, 0.7, 1.0, 16]} />
+        </mesh>
+        <group ref={spin} position={[0, 1.5, 0]}>
+          <mesh material={mat.brass}>
+            <torusGeometry args={[0.7, 0.035, 12, 48]} />
+          </mesh>
+          <mesh rotation={[Math.PI / 2, 0, 0]} material={mat.gilt}>
+            <torusGeometry args={[0.55, 0.03, 12, 48]} />
+          </mesh>
+          <mesh rotation={[0.4, 0.7, 0]} material={mat.brass}>
+            <torusGeometry args={[0.42, 0.025, 12, 48]} />
+          </mesh>
+          <mesh material={mat.gilt}>
+            <icosahedronGeometry args={[0.12, 0]} />
+          </mesh>
+        </group>
+        <GlowMark on={near} done={done} />
+      </group>
+    )
+  }
+  // brazier mechanism (launches the braziers puzzle)
+  return (
+    <group position={item.pos}>
+      <mesh position={[0, 0.7, 0]} material={mat.stone}>
+        <cylinderGeometry args={[0.18, 0.4, 1.4, 12]} />
+      </mesh>
+      <mesh position={[0, 1.5, 0]} material={mat.brass}>
+        <cylinderGeometry args={[0.7, 0.4, 0.5, 16, 1, true]} />
+      </mesh>
+      <GlowMark on={near} done={done} y={1.7} />
     </group>
   )
 }
@@ -86,27 +106,21 @@ function Orrery({ mat, near }) {
 export default function Inspectables() {
   const { camera } = useThree()
   const near = useUI((s) => s.near)
-  const reading = useUI((s) => s.reading)
-
-  const mat = useMemo(() => {
-    const set = makeMatcapSet()
-    return {
-      stone: makeEstateMatcap(set.stone, CANDLES, { range: 7 }),
-      brass: makeEstateMatcap(set.brass, CANDLES, { range: 9, strength: 3 }),
-      gilt: makeEstateMatcap(set.gilt, CANDLES, { range: 8, strength: 3 }),
-    }
-  }, [])
+  const read = useProgress((s) => s.read)
+  const solved = useProgress((s) => s.solved)
+  const mat = getEstateMaterials()
 
   useEffect(() => {
     const onKey = (e) => {
       if (e.code !== 'KeyE') return
       const st = useUI.getState()
       if (st.paused) return
-      const id = st.near?.id
-      const item = LIST.find((l) => l.id === id)
+      const item = LIST.find((l) => l.id === st.near?.id)
       if (!item) return
-      if (item.kind === 'read') st.read(item.payload)
-      else st.launch(item.gameId)
+      if (item.kind === 'read') {
+        st.read(item.payload)
+        useProgress.getState().markRead(item.payload.id)
+      } else st.launch(item.gameId)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -124,13 +138,10 @@ export default function Inspectables() {
       return
     }
     if (st.paused) return
-    // proximity (horizontal distance from the camera)
     let found = null
-    let best = 4.5
+    let best = 4.8
     for (const l of LIST) {
-      const dx = camera.position.x - l.pos[0]
-      const dz = camera.position.z - l.pos[2]
-      const d = Math.hypot(dx, dz)
+      const d = Math.hypot(camera.position.x - l.pos[0], camera.position.y - l.pos[1], camera.position.z - l.pos[2])
       if (d < best) {
         best = d
         found = l
@@ -142,8 +153,10 @@ export default function Inspectables() {
 
   return (
     <group>
-      <Lectern mat={mat} near={near?.id === 'lectern'} />
-      <Orrery mat={mat} near={near?.id === 'orrery'} />
+      {LIST.map((item) => {
+        const done = item.kind === 'read' ? !!read[item.payload.id] : !!solved[item.gameId]
+        return <Model key={item.id} item={item} near={near?.id === item.id} mat={mat} done={done} />
+      })}
     </group>
   )
 }

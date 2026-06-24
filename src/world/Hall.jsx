@@ -2,8 +2,7 @@ import React, { useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
 import { flutedColumnGeometry, archRingGeometry, radialTexture } from './geometry.js'
-import { makeMatcapSet } from '../render/matcaps.js'
-import { makeEstateMatcap } from '../render/estateMaterial.js'
+import { getEstateMaterials } from '../render/estateMaterials.js'
 import { BAYS, COL_X, COL_H, WALL_X, zNear, zFar, len, midZ, CANDLES } from './layout.js'
 import { T } from '../render/treatments.js'
 import { REDUCED } from '../util/env.js'
@@ -13,17 +12,7 @@ const SPRING = COL_H // arches spring from the column tops
 export { CANDLES }
 
 export function useEstateMaterials() {
-  return useMemo(() => {
-    const set = makeMatcapSet()
-    const c = T.candle
-    return {
-      stone: makeEstateMatcap(set.stone, CANDLES, { warm: c.warm, range: c.range, strength: c.strength * 0.92 }),
-      oak: makeEstateMatcap(set.oak, CANDLES, { warm: c.warm, range: c.range, strength: c.strength * 1.08 }),
-      brass: makeEstateMatcap(set.brass, CANDLES, { warm: c.warm, range: c.range + 1.5, strength: c.strength * 1.15 }),
-      gilt: makeEstateMatcap(set.gilt, CANDLES, { warm: c.warm, range: c.range + 0.5, strength: c.strength * 1.15 }),
-      floor: makeEstateMatcap(set.stone, CANDLES, { warm: c.warm, range: c.range, strength: c.strength * 0.78, floor: true }),
-    }
-  }, [])
+  return getEstateMaterials()
 }
 
 function Column({ x, z, mat }) {
@@ -56,7 +45,7 @@ function TransverseArch({ z, mat }) {
   return <mesh position={[0, SPRING + 0.8, z]} geometry={geo} material={mat.stone} />
 }
 
-function Candle({ position }) {
+export function Candle({ position, intensity = 1 }) {
   const ref = useRef()
   const core = useRef()
   const tex = useMemo(() => radialTexture({ inner: 'rgba(255,196,120,1)', outer: 'rgba(255,150,60,0)' }), [])
@@ -65,12 +54,12 @@ function Candle({ position }) {
     const t = s.clock.elapsedTime
     const f = 0.82 + FLICK * (0.14 * Math.sin(t * 9 + position[0] * 3) + 0.06 * Math.sin(t * 23.3 + position[2]))
     if (ref.current) {
-      ref.current.scale.setScalar(3.0 * f)
-      ref.current.material.opacity = 0.85 * f
+      ref.current.scale.setScalar(3.0 * f * (0.6 + 0.4 * intensity))
+      ref.current.material.opacity = 0.85 * f * intensity
     }
     if (core.current) {
       core.current.scale.setScalar(0.7 * f)
-      core.current.material.opacity = f
+      core.current.material.opacity = f * intensity
     }
   })
   return (
@@ -92,14 +81,13 @@ export default function Hall() {
     for (const k in mat) mat[k].userData.uniforms.uTime.value = t
   })
   const farArch = useMemo(() => archRingGeometry({ ri: 6.2, ro: 8.2, depth: 2.6 }), [])
-  const steps = useMemo(() => Array.from({ length: 12 }, (_, i) => i), [])
   const pendant = useMemo(() => flutedColumnGeometry({ height: 11, radius: 0.6 }), [])
 
   return (
     <group>
-      {/* flagstone floor */}
-      <mesh position={[0, 0, midZ]} rotation={[-Math.PI / 2, 0, 0]} material={mat.floor}>
-        <planeGeometry args={[2 * WALL_X, len + 30]} />
+      {/* flagstone floor (ends at the far arch where the descent begins) */}
+      <mesh position={[0, 0, 4.5]} rotation={[-Math.PI / 2, 0, 0]} material={mat.floor}>
+        <planeGeometry args={[2 * WALL_X, 69]} />
       </mesh>
 
       {/* enclosing outer walls rising into darkness */}
@@ -122,13 +110,6 @@ export default function Hall() {
         </group>
       ))}
 
-      {/* descent stair beyond the far arch, dropping into the dark */}
-      {steps.map((i) => (
-        <mesh key={'s' + i} position={[0, -0.5 - i * 0.75, zFar - 6 - i * 1.7]} material={mat.stone}>
-          <boxGeometry args={[10 - i * 0.2, 0.75, 1.8]} />
-        </mesh>
-      ))}
-
       {/* colonnade + arches */}
       {BAYS.map((z, i) => (
         <group key={i}>
@@ -146,12 +127,8 @@ export default function Hall() {
         <boxGeometry args={[2.4, 1.4, len]} />
       </mesh>
 
-      {/* grand far archway framing the descent */}
+      {/* grand far archway framing the descent into Zone II */}
       <mesh position={[0, 0.5, zFar - 4]} geometry={farArch} material={mat.brass} />
-      {/* threshold floor beyond, dropping into dark */}
-      <mesh position={[0, -1.5, zFar - 14]} rotation={[-Math.PI / 2, 0, 0]} material={mat.stone}>
-        <planeGeometry args={[18, 18]} />
-      </mesh>
 
       {/* UNCANNY: bridges crossing the void above, half-lost in fog, slightly
           askew so the space reads a touch wrong. Piranesi Carceri verticality. */}

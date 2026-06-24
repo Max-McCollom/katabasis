@@ -112,9 +112,9 @@ export default function Player() {
     const strafe = locked ? 0 : keys.current.r - keys.current.l
     const sy = Math.sin(yaw.current)
     const cy = Math.cos(yaw.current)
-    // heading H=(sy,cy); right R=(cy,-sy)
-    let mvx = sy * fwd + cy * strafe
-    let mvz = cy * fwd - sy * strafe
+    // heading H=(sin,cos); right R=(-cos,sin) so that facing -Z, D moves +X
+    let mvx = sy * fwd - cy * strafe
+    let mvz = cy * fwd + sy * strafe
     const m = Math.hypot(mvx, mvz)
     const speed = p.speed * (keys.current.run ? p.runMult : 1) * dt
     if (m > 1e-4) {

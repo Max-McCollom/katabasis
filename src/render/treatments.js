@@ -47,5 +47,6 @@ function pick() {
 }
 
 const id = pick()
-export const TREATMENT_ID = id && TREATMENTS[id] ? id : 'gold'
+// Charcoal is the default register (the descent); gold/ember via ?treatment=.
+export const TREATMENT_ID = id && TREATMENTS[id] ? id : 'charcoal'
 export const T = TREATMENTS[TREATMENT_ID]

@@ -1,0 +1,70 @@
+/* the braziers (lights-out) */
+.kb-braz {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.kb-braz__link {
+  stroke: rgba(150, 120, 70, 0.22);
+  stroke-width: 2;
+}
+.kb-braz__node {
+  cursor: pointer;
+}
+.kb-braz__halo {
+  fill: rgba(233, 192, 116, 0);
+  transition: fill 0.45s ease;
+}
+.kb-braz__bowl {
+  fill: #15100a;
+  stroke: rgba(150, 120, 70, 0.45);
+  stroke-width: 2;
+  transition: fill 0.4s ease, stroke 0.4s ease;
+}
+.kb-braz__sigil {
+  fill: rgba(150, 120, 70, 0.55);
+  font-size: 18px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+  transition: fill 0.4s ease;
+}
+.kb-braz__node:hover .kb-braz__bowl {
+  stroke: rgba(220, 180, 110, 0.8);
+}
+
+/* lit brazier: warm flame in the bowl */
+.kb-braz__node.is-lit .kb-braz__bowl {
+  fill: #b86a22;
+  stroke: rgba(240, 200, 110, 0.85);
+}
+.kb-braz__node.is-lit .kb-braz__halo {
+  fill: rgba(233, 160, 70, 0.16);
+}
+.kb-braz__node.is-lit .kb-braz__sigil {
+  fill: #fff0c8;
+}
+
+/* solved: every fire flares to one radiance */
+.kb-braz.is-solved .kb-braz__node .kb-braz__bowl {
+  fill: #d98a2c;
+  stroke: rgba(255, 224, 150, 1);
+  filter: drop-shadow(0 0 8px rgba(255, 200, 110, 0.9));
+}
+.kb-braz.is-solved .kb-braz__node .kb-braz__halo {
+  fill: rgba(255, 200, 110, 0.26);
+}
+.kb-braz.is-solved .kb-braz__link {
+  stroke: rgba(240, 200, 110, 0.5);
+}
+.kb-braz.is-solved .kb-braz__sigil {
+  fill: #fff6df;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-braz__halo,
+  .kb-braz__bowl,
+  .kb-braz__sigil {
+    transition: none;
+  }
+}
