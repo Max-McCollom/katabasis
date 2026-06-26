@@ -1,5 +1,47 @@
 # HANDOFF — start here
 
+## ⟶ Next session, start here (updated 2026-06-26)
+
+**Git state:** on branch `creative/descent-shaft-strengthening` @ `8332474`,
+**1 commit ahead of `main`** (`662c4ff`), working tree **CLEAN**. The branch is a
+clean fast-forward of main (no divergence).
+
+**Two checkpoints landed this session:**
+1. `662c4ff` (on `main`) — *Stabilize default route + gate rejected Nadir arc.*
+   The default experience is **Hall → Descent → shaft into darkness**. The whole
+   **Nadir/Return arc was rejected as default** (read as primitive blockout across
+   three attempts) and is preserved only behind **`?arc=nadir`**. Do **not** build
+   on the Nadir/Return until it is redesigned from scratch (use darkness/concealment,
+   not more procedural boxes). `src/world/Nadir.jsx` holds that experiment.
+2. `8332474` (on this branch) — *Authored detail pass.* New reusable
+   `src/world/detailKit.jsx` (Sconce, HangingLantern, FlameCup, BalusterRail,
+   ContactDisc, AssetBoundary). Floating glow-orbs are now **diegetic fixtures**
+   (Hall candles = column sconces; descent flames = hanging lanterns); columns gain
+   stepped bases / astragal rings / tiered capitals / cornice; the stair gains a
+   brass nosing rhythm; the landing balustrade is rebuilt and now uses the **real
+   turned `baluster.glb` rail by default** through the existing GLB+matcap pipeline.
+
+**Active URL params (new this session):**
+- `?arc=nadir` — render the rejected Nadir/Return experiment (off by default).
+- `?rails=boxes` — roll the landing rail back to the old primitive box balusters
+  (the turned `baluster.glb` is the default; it also auto-falls-back to boxes if the
+  glb ever fails to load).
+
+**Open decisions / next steps:**
+- **Fast-forward `main`** to this checkpoint when ready:
+  `git checkout main && git merge --ff-only creative/descent-shaft-strengthening`
+  (nothing is pushed; all local).
+- The default route now fetches `baluster.glb` (~669 KB, one cached request, default
+  route only — not under `?arc=nadir`). Accepted; revisit only if perf demands.
+- **Validated visual direction** (see `docs/ART_REFERENCE_AUDIT.md`): profiled geometry
+  via the GLB+matcap pipeline, sourced from the project's own procedurally-authored
+  profiles — **not** external asset kits (fitting CC0 assets were too heavy, light
+  ones stylistically wrong). Next elements to take through this pipeline: turned newel
+  finials, a profiled flame-bowl/lantern body, a molded cornice profile.
+- verify-slice was green; smoke `/`, `/?arc=nadir`, `/?rails=boxes` all clean.
+
+The rest of this doc is the standing project orientation.
+
 ## What Katabasis is
 A free-roam 3D estate (a walkable Piranesi/Doré world) that presents a
 systematic options-research system as an atmosphere, not a dashboard. The
