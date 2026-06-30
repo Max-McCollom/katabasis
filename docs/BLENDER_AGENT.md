@@ -34,13 +34,13 @@ Two facts govern everything here:
    Author live over MCP, then commit the finished parametric script and run it
    `--background` for the actual bake/export.
 
-Wiring (verified this session, durable paths):
-- Repo clone: `/Users/maxmccollom/tools/blender_mcp` (well away from the site
-  repo and the trading bot; never inside this repo's tree).
+Wiring (verified this session, local-only paths):
+- Repo clone: `<LOCAL_BLENDER_MCP_DIR>` (well away from the site repo and any
+  private trading code; never inside this repo's tree).
 - MCP server venv (built from Blender's bundled 3.13, no brew/uv needed):
-  `/Users/maxmccollom/tools/blender_mcp/.venv/bin/blender-mcp`.
+  `<LOCAL_BLENDER_MCP_DIR>/.venv/bin/blender-mcp`.
 - Registered with Claude Code as the `blender` stdio server (local scope).
-- Pre-built add-on zip: `/Users/maxmccollom/tools/blender_mcp/_built/mcp-1.0.0.zip`.
+- Pre-built add-on zip: `<LOCAL_BLENDER_MCP_DIR>/_built/mcp-1.0.0.zip`.
 
 The server health-check reading "Connected" only means the MCP server process is
 healthy. Live-scene tools additionally require the GUI Blender add-on bridge to

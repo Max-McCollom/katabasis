@@ -155,8 +155,8 @@ inviolable (see CLAUDE.md sections 1-2; frozen copy lives verbatim in
   Blender model work (version lock, idempotency, the BANNED-PATTERNS list of
   removed/relocated APIs, the bmesh-vs-GeoNodes rule, the 5-iteration cap, and
   the PARAMS/sentinel output contract) live in `docs/BLENDER_AGENT.md` — read
-  it before building geometry. Server venv + repo live under
-  `/Users/maxmccollom/tools/blender_mcp` (outside this repo by design).
+  it before building geometry. Server venv + repo live in your local Blender
+  MCP checkout, outside this repo by design.
 
 ### Shippable realism ceiling for models (VERIFIED in-hall, LOCKED)
 First production model `procedural/baluster.py` (a parametric turned baluster:
