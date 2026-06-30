@@ -1,0 +1,216 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-06-30T00:00:00Z",
+  "mode": "PUBLIC_DEMO",
+  "provenance": "DEMO_SYNTHETIC",
+  "label": "DEMO_SYNTHETIC public cockpit snapshot",
+  "public_safety": {
+    "static_assets_assumed_public": true,
+    "contains_real_telemetry": false,
+    "contains_real_p_l": false,
+    "contains_trade_rows": false,
+    "contains_watchlists": false,
+    "contains_contract_inputs": false,
+    "contains_strategy_identities": false,
+    "contains_thresholds": false,
+    "contains_parameter_weights": false,
+    "contains_trigger_logic": false,
+    "contains_live_execution_flags": false,
+    "contains_kill_rates": false,
+    "contains_candidate_counts": false,
+    "contains_reconstructable_private_values": false,
+    "redaction_policy": "Fields are removed from payloads rather than hidden in the DOM.",
+    "aggregate_policy": "Public aggregates must be irreversible and must not encode withheld quantities.",
+    "real_telemetry_policy": "Real telemetry requires private authenticated server-side authorization and is not part of this static fixture."
+  },
+  "panel_state_legend": {
+    "READY": "Real, cleared, recruiter-safe data is present and current.",
+    "PARTIAL": "Some cleared data is present; absent data is declared.",
+    "MISSING": "The data is unavailable to this surface.",
+    "GATED": "Real data belongs behind the future private authenticated cockpit.",
+    "PROPRIETARY_REDACTED": "A value exists but is withheld by the proprietary boundary.",
+    "DEMO_SYNTHETIC": "The displayed data is synthetic and for demonstration only."
+  },
+  "panels": {
+    "flight_recorder": {
+      "state": "DEMO_SYNTHETIC",
+      "provenance": "DEMO_SYNTHETIC",
+      "label": "DEMO_SYNTHETIC flight recorder",
+      "purpose": "Show coarse cockpit health language without exposing real events.",
+      "summary": {
+        "demo_health": "nominal",
+        "demo_activity": "synthetic observation loop",
+        "detail_level": "coarse public shell"
+      },
+      "coarse_events": [
+        {
+          "label": "Synthetic intake heartbeat",
+          "state": "DEMO_SYNTHETIC",
+          "description": "Demonstrates that a future panel can show coarse liveness without event rows."
+        },
+        {
+          "label": "Synthetic validation gate observed",
+          "state": "DEMO_SYNTHETIC",
+          "description": "Shows process state only; no trigger, threshold, instrument, or timestamp is present."
+        },
+        {
+          "label": "Synthetic export sealed",
+          "state": "DEMO_SYNTHETIC",
+          "description": "Represents a public-safe publication boundary, not an engine event."
+        }
+      ],
+      "withheld": [
+        "real event stream",
+        "per-event timestamps",
+        "instruments",
+        "execution details",
+        "data-source details"
+      ]
+    },
+    "research_ledger": {
+      "state": "DEMO_SYNTHETIC",
+      "provenance": "DEMO_SYNTHETIC",
+      "label": "DEMO_SYNTHETIC research ledger shell",
+      "purpose": "Show the research lifecycle as methodology, not real results.",
+      "lifecycle": [
+        {
+          "phase": "pre_registration",
+          "state": "DEMO_SYNTHETIC",
+          "description": "A hypothesis is recorded before evaluation."
+        },
+        {
+          "phase": "validation_gate",
+          "state": "DEMO_SYNTHETIC",
+          "description": "A gate is represented as a process step only."
+        },
+        {
+          "phase": "boundary_review",
+          "state": "DEMO_SYNTHETIC",
+          "description": "Public output is checked before publication."
+        },
+        {
+          "phase": "public_shell",
+          "state": "DEMO_SYNTHETIC",
+          "description": "Only the lifecycle shell is shown publicly."
+        }
+      ],
+      "withheld": [
+        "strategy identities",
+        "per-strategy verdicts",
+        "trial quantities",
+        "candidate quantities",
+        "attrition quantities",
+        "promotion or kill parameters"
+      ]
+    },
+    "volatility_topology": {
+      "state": "DEMO_SYNTHETIC",
+      "provenance": "DEMO_SYNTHETIC",
+      "label": "DEMO_SYNTHETIC volatility topology",
+      "purpose": "Demonstrate an options-native substrate on an illustrative universe.",
+      "illustrative_universe": {
+        "label": "standardized broad-market demonstration substrate",
+        "is_real_traded_universe": false,
+        "exact_size_disclosed": false
+      },
+      "surface": {
+        "units": "synthetic ordinal intensity",
+        "term_buckets": [
+          "near",
+          "middle",
+          "far"
+        ],
+        "moneyness_buckets": [
+          "downside",
+          "center",
+          "upside"
+        ],
+        "cells": [
+          {
+            "term": "near",
+            "moneyness": "downside",
+            "intensity": "elevated"
+          },
+          {
+            "term": "near",
+            "moneyness": "center",
+            "intensity": "moderate"
+          },
+          {
+            "term": "near",
+            "moneyness": "upside",
+            "intensity": "low"
+          },
+          {
+            "term": "middle",
+            "moneyness": "downside",
+            "intensity": "moderate"
+          },
+          {
+            "term": "middle",
+            "moneyness": "center",
+            "intensity": "moderate"
+          },
+          {
+            "term": "middle",
+            "moneyness": "upside",
+            "intensity": "low"
+          },
+          {
+            "term": "far",
+            "moneyness": "downside",
+            "intensity": "low"
+          },
+          {
+            "term": "far",
+            "moneyness": "center",
+            "intensity": "moderate"
+          },
+          {
+            "term": "far",
+            "moneyness": "upside",
+            "intensity": "moderate"
+          }
+        ]
+      },
+      "withheld": [
+        "real traded universe",
+        "contract inputs",
+        "instrument identifiers",
+        "live chain snapshots",
+        "strategy domain"
+      ]
+    },
+    "private_tools": {
+      "state": "GATED",
+      "provenance": "DEMO_SYNTHETIC",
+      "label": "GATED private tools placeholder",
+      "purpose": "Reserve space for future authenticated tools without shipping payload.",
+      "payload": null,
+      "requires": "future private authenticated server-side authorization",
+      "withheld": [
+        "watchlists",
+        "private logs",
+        "projections",
+        "operator tools"
+      ]
+    },
+    "private_real_telemetry": {
+      "state": "GATED",
+      "provenance": "DEMO_SYNTHETIC",
+      "label": "GATED real telemetry placeholder",
+      "purpose": "Declare that real telemetry is out of scope for the public static contract.",
+      "payload": null,
+      "requires": "future private authenticated server-side authorization",
+      "withheld": [
+        "real flight recorder",
+        "real research ledger",
+        "real coverage",
+        "real P/L",
+        "trade rows",
+        "positions",
+        "holdings"
+      ]
+    }
+  }
+}
