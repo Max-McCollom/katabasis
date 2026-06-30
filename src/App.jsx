@@ -159,6 +159,6 @@ function EstateApp() {
 
 export default function App() {
   const path = typeof window !== 'undefined' ? window.location.pathname : '/'
-  if (path === '/cockpit' || path.startsWith('/cockpit/')) return <Cockpit />
-  return <EstateApp />
+  if (path === '/estate' || path.startsWith('/estate/')) return <EstateApp />
+  return <Cockpit />
 }
