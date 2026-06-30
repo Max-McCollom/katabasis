@@ -9,6 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "check:allowlist": "sh .githooks/allowlist-check.sh",
+    "check:telemetry": "node tools/validate-public-telemetry.mjs",
     "prepare": "git config core.hooksPath .githooks || true"
   },
   "dependencies": {

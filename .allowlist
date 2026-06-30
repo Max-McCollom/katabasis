@@ -22,6 +22,7 @@ file:vite.config.js
 file:index.html
 file:public/CNAME
 file:public/telemetry/README.md
+file:tools/validate-public-telemetry.mjs
 
 # -- source and assets ------------------------------------------------------
 dir:src/:html css js jsx glsl vert frag json svg

@@ -30,3 +30,7 @@ Every public fixture must also declare provenance. Synthetic payloads use
 Redaction means removing fields from exported payloads. It does not mean hiding,
 masking, blurring, or omitting values only in DOM/UI after the browser has
 downloaded them.
+
+## Validation
+
+Run `npm run check:telemetry` before committing public telemetry fixture changes.
