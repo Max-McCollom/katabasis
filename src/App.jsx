@@ -12,6 +12,7 @@ import Atmosphere from './world/Atmosphere.jsx'
 import DepthGrade from './world/DepthGrade.jsx'
 import AdaptiveQuality from './engine/AdaptiveQuality.jsx'
 import Hud from './ui/Hud.jsx'
+import Cockpit from './cockpit/Cockpit.jsx'
 
 // Code-split: the Rapier-dependent interaction layer (and its WASM) loads after
 // first paint, hidden behind the arrival veil. Drops the initial bundle hard.
@@ -100,7 +101,7 @@ const SHOTS = {
   destLookback: [0, -21.7, -117, 0, -24, -99], // from the destination, looking back toward the dark
 }
 
-export default function App() {
+function EstateApp() {
   const post = useQuality((s) => s.post)
   useEffect(() => {
     if (LOW && !HARNESS) useQuality.getState().stepDown()
@@ -154,4 +155,10 @@ export default function App() {
       </Canvas>
     </>
   )
+}
+
+export default function App() {
+  const path = typeof window !== 'undefined' ? window.location.pathname : '/'
+  if (path === '/cockpit' || path.startsWith('/cockpit/')) return <Cockpit />
+  return <EstateApp />
 }
