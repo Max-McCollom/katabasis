@@ -1,6 +1,13 @@
 # HANDOFF — start here
 
-## ⟶ Next session, start here (updated 2026-06-26)
+> **[SUPERSEDED 2026-07-01.]** Everything below describes the estate-world era
+> and is historical. The product is now the **Cockpit** (default route `/`,
+> `src/cockpit/`), governed by `docs/COCKPIT_PLAN.md`; the estate survives only
+> as the lazy-loaded `/estate` archive (tag `archive/estate-world`) and its
+> harnesses now target `localhost:5173/estate`. Start from the repo CLAUDE.md's
+> CONSTITUTION STATUS section and `docs/COCKPIT_PLAN.md`, not from this file.
+
+## ⟶ Estate-era handoff (HISTORICAL — updated 2026-06-26)
 
 **Git state:** on branch `creative/descent-shaft-strengthening` @ `8332474`,
 **1 commit ahead of `main`** (`662c4ff`), working tree **CLEAN**. The branch is a

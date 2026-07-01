@@ -1,6 +1,36 @@
-# Decision log: the immersive 3D build
+# Decision log
 
-Running log of load-bearing choices for the free-roam 3D estate. Newest first.
+Running log of load-bearing choices. Newest first. (Entries below the
+2026-07-01 block describe the archived free-roam 3D estate era.)
+
+## 2026-07-01 — reset session (LOCKED facts)
+- **Constitution drift ended.** The repo's local CLAUDE.md gained a
+  CONSTITUTION STATUS header: the Cockpit is the product (COCKPIT_PLAN.md
+  governs; brief sections 3-4/6-7 superseded), the estate is an archive at
+  /estate + tag `archive/estate-world`, Section 5 frozen copy stays frozen
+  (its Cockpit placement remains Max's open call), boundary/copy-standard/
+  kill-list sections stay fully binding.
+- **Estate code-split.** EstateApp moved to src/EstateApp.jsx behind
+  React.lazy; the default route dropped 439 KB gzip -> 64 KB gzip and ships
+  zero three.js. Harness scripts retargeted to localhost:5173/estate (they
+  had silently pointed at the Cockpit since the root-route promotion).
+- **Sentinel widened** from one token to five case-insensitive fragment-
+  assembled patterns (bot name, research-repo name, scheduler label, broker,
+  /Users/ home paths — the class that leaked in 662c4ff and was scrubbed at
+  tip by c8be9d6). Verified zero hits across all tracked files.
+- **Telemetry validator wired** into the pre-commit hook (when the fixture
+  or validator is staged) and as a CI backstop step before every build.
+- **Meta copy fixed.** index.html no longer says "premium ... deeper";
+  plain register per the copy standard. theme-color matches the navy shell.
+- **Open item (Max's call, unchanged by this session):** pre-sanitize blobs
+  (a Blender-tooling /Users path + the phrase "the trading bot") remain
+  reachable from public history between 662c4ff and 4ede6c5; the options are
+  explicit acceptance (mild exposure) or a public-history rewrite. Nothing
+  was pushed this session.
+
+---
+
+## Estate era (ARCHIVED) — decision log for the free-roam 3D build
 
 ## Environment realities (verified this session)
 - **Blender is not installed** (no PATH binary, no .app). The headless Blender
