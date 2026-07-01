@@ -16,6 +16,69 @@ function useCockpitRouteClass() {
   }, [])
 }
 
+function useArchitecturalVeil() {
+  useEffect(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const root = document.documentElement
+    let frame = 0
+
+    const update = () => {
+      frame = 0
+      if (reduceMotion.matches) {
+        root.style.setProperty('--kc-veil-scroll', '0')
+        root.style.setProperty('--kc-veil-x', '0')
+        root.style.setProperty('--kc-veil-y', '0')
+        return
+      }
+
+      const hero = document.querySelector('.kc-hero')
+      const rect = hero?.getBoundingClientRect()
+      const heroHeight = Math.max(rect?.height ?? window.innerHeight, 1)
+      const progress = rect ? Math.min(Math.max(-rect.top / heroHeight, 0), 1) : 0
+      root.style.setProperty('--kc-veil-scroll', progress.toFixed(4))
+    }
+
+    const schedule = () => {
+      if (!frame) frame = window.requestAnimationFrame(update)
+    }
+
+    const handlePointer = (event) => {
+      if (reduceMotion.matches) return
+      const x = (event.clientX / window.innerWidth - 0.5).toFixed(4)
+      const y = (event.clientY / window.innerHeight - 0.5).toFixed(4)
+      root.style.setProperty('--kc-veil-x', x)
+      root.style.setProperty('--kc-veil-y', y)
+    }
+
+    update()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
+    window.addEventListener('pointermove', handlePointer, { passive: true })
+
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      window.removeEventListener('pointermove', handlePointer)
+      root.style.removeProperty('--kc-veil-scroll')
+      root.style.removeProperty('--kc-veil-x')
+      root.style.removeProperty('--kc-veil-y')
+    }
+  }, [])
+}
+
+function ArchitecturalVeil() {
+  return (
+    <div className="kc-architectural-veil" aria-hidden="true">
+      <div className="kc-veil-layer kc-veil-layer--base" />
+      <div className="kc-veil-layer kc-veil-layer--pale" />
+      <div className="kc-veil-layer kc-veil-layer--white" />
+      <div className="kc-veil-layer kc-veil-layer--ruling" />
+      <div className="kc-veil-layer kc-veil-layer--gold" />
+    </div>
+  )
+}
+
 function useSnapshot() {
   const [snapshot, setSnapshot] = useState(null)
   const [error, setError] = useState('')
@@ -83,6 +146,7 @@ function ShellVisual() {
 function Hero({ snapshot }) {
   return (
     <section className="kc-hero" id="overview">
+      <ArchitecturalVeil />
       <div className="kc-hero__copy">
         <p className="kc-kicker">Public shell / private depth</p>
         <h1>A public shell for a private quantitative system.</h1>
@@ -304,6 +368,7 @@ function Evolution() {
 
 export default function Cockpit() {
   useCockpitRouteClass()
+  useArchitecturalVeil()
   const { snapshot, error } = useSnapshot()
 
   return (

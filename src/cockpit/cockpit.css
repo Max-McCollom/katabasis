@@ -8,7 +8,7 @@ body.katabasis-cockpit-route {
   min-height: 100% !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
-  background: #f8fafc !important;
+  background: #0a1628 !important;
 }
 
 body.katabasis-cockpit-route {
@@ -25,10 +25,16 @@ body.katabasis-cockpit-route #root {
 }
 
 .kc-shell {
-  --paper: #f8fafc;
-  --paper-blue: #eef7fc;
+  --bg-deep-navy: #0a1628;
+  --veil-pale-columbia-blue: #d7ecf8;
+  --veil-near-white: #f8fbff;
+  --veil-deeper-blue: #1e3a5f;
+  --accent-restrained-gold: #c7a96a;
+  --paper: rgba(248, 250, 252, 0.78);
+  --paper-strong: rgba(255, 255, 255, 0.88);
+  --paper-blue: rgba(232, 244, 252, 0.8);
   --columbia: #b9d9eb;
-  --columbia-soft: rgba(185, 217, 235, 0.36);
+  --columbia-soft: rgba(185, 217, 235, 0.32);
   --blue: #1f5f8b;
   --blue-deep: #164b75;
   --ink: #07111f;
@@ -40,10 +46,14 @@ body.katabasis-cockpit-route #root {
 
   min-height: 100vh;
   color: var(--ink);
-  background:
-    linear-gradient(180deg, #f8fafc 0%, #f2f8fc 28%, #f8fafc 56%),
-    var(--paper);
+  background: var(--bg-deep-navy);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  isolation: isolate;
+  position: relative;
+  overflow: clip;
+  --kc-veil-scroll: 0;
+  --kc-veil-x: 0;
+  --kc-veil-y: 0;
 }
 
 .kc-shell *,
@@ -54,6 +64,91 @@ body.katabasis-cockpit-route #root {
 
 .kc-shell a {
   color: inherit;
+}
+
+.kc-architectural-veil {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc((100% - 100vw) / 2);
+  right: calc((100% - 100vw) / 2);
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--bg-deep-navy);
+}
+
+.kc-veil-layer {
+  position: absolute;
+  inset: 0;
+  will-change: transform, opacity;
+}
+
+.kc-veil-layer--base {
+  inset: 0;
+  background: #0a1628;
+}
+
+.kc-veil-layer--pale {
+  inset: 0;
+  opacity: calc(0.22 + (var(--kc-veil-scroll) * 0.1));
+  background: #d4e8f7;
+  mix-blend-mode: soft-light;
+}
+
+.kc-veil-layer--white {
+  inset: 0;
+  opacity: 0.12;
+  background: #f4fbff;
+}
+
+.kc-veil-layer--ruling {
+  inset: -5%;
+  opacity: calc(0.08 + (var(--kc-veil-scroll) * 0.04));
+  transform: translate3d(
+    calc(var(--kc-veil-x) * 1.5px),
+    calc(var(--kc-veil-y) * 1.5px),
+    0
+  );
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(248, 251, 255, 0.68) 0,
+      rgba(248, 251, 255, 0.68) 1px,
+      transparent 1px,
+      transparent 42px
+    ),
+    repeating-linear-gradient(
+      18deg,
+      rgba(212, 232, 247, 0.56) 0,
+      rgba(212, 232, 247, 0.56) 1px,
+      transparent 1px,
+      transparent 220px
+    );
+  background-size:
+    100% 100%,
+    100% 100%;
+  animation: kc-ruling-breathe 56s ease-in-out infinite;
+}
+
+.kc-veil-layer--gold {
+  inset: 0;
+  opacity: 0.1;
+  background:
+    linear-gradient(90deg, transparent 0 18%, rgba(199, 169, 106, 0.32) 18.02%, transparent 18.08%),
+    linear-gradient(0deg, transparent 0 72%, rgba(199, 169, 106, 0.22) 72.02%, transparent 72.08%);
+}
+
+@keyframes kc-ruling-breathe {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  50% {
+    background-position: 0 2px, 2px 0;
+  }
+  100% {
+    background-position: 0 0, 0 0;
+  }
 }
 
 .kc-header,
@@ -78,8 +173,9 @@ body.katabasis-cockpit-route #root {
   justify-content: space-between;
   gap: 24px;
   min-height: 72px;
-  background: rgba(248, 250, 252, 0.86);
-  border-bottom: 1px solid rgba(31, 95, 139, 0.1);
+  background: rgba(248, 251, 255, 0.72);
+  border-bottom: 1px solid rgba(215, 236, 248, 0.24);
+  box-shadow: 0 18px 54px rgba(7, 17, 31, 0.12);
   backdrop-filter: blur(18px);
 }
 
@@ -129,12 +225,20 @@ body.katabasis-cockpit-route #root {
 }
 
 .kc-hero {
+  position: relative;
+  z-index: 0;
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(360px, 0.74fr);
   gap: clamp(40px, 7vw, 96px);
   align-items: center;
   min-height: calc(100vh - 72px);
   padding: clamp(70px, 10vh, 122px) 0;
+  isolation: isolate;
+}
+
+.kc-hero > :not(.kc-architectural-veil) {
+  position: relative;
+  z-index: 1;
 }
 
 .kc-hero__copy {
@@ -153,7 +257,7 @@ body.katabasis-cockpit-route #root {
 .kc-hero h1 {
   max-width: 760px;
   margin: 18px 0 0;
-  color: var(--ink);
+  color: #f8fbff;
   font-size: clamp(3.4rem, 7.2vw, 7.15rem);
   font-weight: 720;
   letter-spacing: 0;
@@ -172,6 +276,7 @@ body.katabasis-cockpit-route #root {
 .kc-hero p:not(.kc-kicker) {
   max-width: 620px;
   margin: 26px 0 0;
+  color: rgba(248, 251, 255, 0.76);
 }
 
 .kc-hero__actions {
@@ -204,9 +309,10 @@ body.katabasis-cockpit-route #root {
 }
 
 .kc-hero__actions a + a {
-  color: var(--blue);
-  background: transparent;
-  border-color: var(--line-strong);
+  color: #f8fbff;
+  background: rgba(248, 251, 255, 0.08);
+  border-color: rgba(215, 236, 248, 0.3);
+  backdrop-filter: blur(14px);
 }
 
 .kc-hero__actions a:hover,
@@ -216,7 +322,7 @@ body.katabasis-cockpit-route #root {
 }
 
 .kc-hero__actions a + a:hover {
-  color: var(--ink);
+  color: #ffffff;
   border-color: var(--gold);
 }
 
@@ -229,19 +335,10 @@ body.katabasis-cockpit-route #root {
   position: relative;
   height: 520px;
   isolation: isolate;
-  perspective: 1100px;
 }
 
 .kc-shell-visual::before {
-  content: "";
-  position: absolute;
-  inset: 44px 28px 20px;
-  background:
-    radial-gradient(circle at 24% 18%, rgba(185, 217, 235, 0.72), transparent 26%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(185, 217, 235, 0.34));
-  border-radius: 40px;
-  filter: blur(1px);
-  z-index: -2;
+  content: none;
 }
 
 .kc-shell-visual__mark {
@@ -273,15 +370,17 @@ body.katabasis-cockpit-route #root {
 
 .kc-shell-visual__plane {
   position: absolute;
-  left: 10%;
-  right: 3%;
+  left: 8%;
+  right: 6%;
   min-height: 132px;
   padding: 22px 26px;
-  background: rgba(255, 255, 255, 0.76);
-  border: 1px solid rgba(31, 95, 139, 0.18);
-  border-radius: 28px;
-  box-shadow: 0 24px 80px rgba(22, 75, 117, 0.12);
-  transform: rotateX(58deg) rotateZ(-9deg);
+  background: rgba(248, 251, 255, 0.86);
+  border: 1px solid rgba(215, 236, 248, 0.42);
+  border-radius: 24px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 14px 36px rgba(7, 17, 31, 0.12);
+  transform: rotate(-4.5deg);
   transform-origin: center;
   transition:
     transform 320ms ease,
@@ -289,7 +388,7 @@ body.katabasis-cockpit-route #root {
 }
 
 .kc-shell-visual:hover .kc-shell-visual__plane {
-  transform: rotateX(56deg) rotateZ(-7deg) translateY(-5px);
+  transform: rotate(-3deg) translateY(-3px);
 }
 
 .kc-shell-visual__plane span {
@@ -307,16 +406,17 @@ body.katabasis-cockpit-route #root {
 }
 
 .kc-shell-visual__plane--surface {
-  top: 72px;
+  top: 78px;
   z-index: 3;
 }
 
 .kc-shell-visual__plane--boundary {
-  top: 184px;
-  left: 4%;
-  right: 10%;
+  top: 192px;
+  left: 3%;
+  right: 13%;
   z-index: 2;
-  background: rgba(238, 247, 252, 0.82);
+  background: rgba(238, 247, 252, 0.9);
+  transform: rotate(1.5deg);
 }
 
 .kc-shell-visual__plane--boundary i {
@@ -324,13 +424,17 @@ body.katabasis-cockpit-route #root {
 }
 
 .kc-shell-visual__plane--depth {
-  top: 298px;
+  top: 306px;
   left: 0;
-  right: 18%;
+  right: 20%;
   z-index: 1;
   color: #e7f4fb;
-  background: linear-gradient(135deg, var(--blue-deep), var(--navy));
+  background:
+    linear-gradient(135deg, rgba(22, 75, 117, 0.96), rgba(7, 17, 31, 0.96)),
+    linear-gradient(90deg, rgba(248, 251, 255, 0.06) 1px, transparent 1px);
+  background-size: auto, 54px 54px;
   border-color: rgba(185, 217, 235, 0.18);
+  transform: rotate(4deg);
 }
 
 .kc-shell-visual__plane--depth span {
@@ -338,13 +442,7 @@ body.katabasis-cockpit-route #root {
 }
 
 .kc-shell-visual__thread {
-  position: absolute;
-  right: 15%;
-  width: 1px;
-  height: 280px;
-  background: linear-gradient(180deg, transparent, rgba(31, 95, 139, 0.42), transparent);
-  transform: rotate(26deg);
-  z-index: 5;
+  display: none;
 }
 
 .kc-shell-visual__thread--one {
@@ -369,19 +467,32 @@ body.katabasis-cockpit-route #root {
 .kc-hero__contract span {
   padding: 7px 10px;
   color: var(--blue-deep);
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid var(--line);
+  background: rgba(248, 251, 255, 0.7);
+  border: 1px solid rgba(215, 236, 248, 0.36);
+  backdrop-filter: blur(14px);
   border-radius: 999px;
   font-size: 0.74rem;
   font-weight: 760;
 }
 
 .kc-overview,
-.kc-public-private,
 .kc-pillars,
 .kc-artifacts,
 .kc-evolution {
   padding: clamp(78px, 10vw, 132px) 0;
+}
+
+.kc-overview,
+.kc-pillars,
+.kc-artifacts,
+.kc-evolution {
+  margin-block: clamp(28px, 5vw, 72px);
+  padding-inline: clamp(22px, 4vw, 54px);
+  background: rgba(248, 251, 255, 0.72);
+  border: 1px solid rgba(215, 236, 248, 0.28);
+  border-radius: 42px;
+  box-shadow: 0 24px 90px rgba(7, 17, 31, 0.14);
+  backdrop-filter: blur(22px);
 }
 
 .kc-section-heading {
@@ -415,7 +526,7 @@ body.katabasis-cockpit-route #root {
 .kc-artifact {
   min-height: 260px;
   padding: 28px;
-  background: rgba(255, 255, 255, 0.66);
+  background: rgba(255, 255, 255, 0.58);
   transition:
     background 180ms ease,
     transform 180ms ease;
@@ -457,10 +568,11 @@ body.katabasis-cockpit-route #root {
 .kc-public-private {
   width: 100%;
   margin-inline: 0;
+  padding-block: clamp(92px, 11vw, 152px);
   padding-inline: max(24px, calc((100vw - 1180px) / 2));
   background:
-    linear-gradient(180deg, rgba(238, 247, 252, 0.82), rgba(11, 19, 32, 0.96)),
-    var(--paper-blue);
+    linear-gradient(180deg, rgba(215, 236, 248, 0.72), rgba(10, 22, 40, 0.9) 66%, rgba(7, 17, 31, 0.96)),
+    transparent;
 }
 
 .kc-public-private .kc-section-heading {
@@ -567,8 +679,9 @@ body.katabasis-cockpit-route #root {
   padding: clamp(90px, 11vw, 150px) max(24px, calc((100vw - 1180px) / 2));
   color: #eff8ff;
   background:
-    radial-gradient(circle at 80% 20%, rgba(185, 217, 235, 0.18), transparent 28%),
-    linear-gradient(135deg, var(--navy), #061427 58%, #0f2f4b);
+    radial-gradient(circle at 80% 20%, rgba(185, 217, 235, 0.16), transparent 28%),
+    linear-gradient(135deg, rgba(11, 19, 32, 0.94), rgba(6, 20, 39, 0.96) 58%, rgba(15, 47, 75, 0.92));
+  border-block: 1px solid rgba(215, 236, 248, 0.14);
 }
 
 .kc-private .kc-kicker,
@@ -691,6 +804,22 @@ body.katabasis-cockpit-route #root {
   .kc-private,
   .kc-evolution {
     animation: kc-reveal 620ms ease both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kc-veil-layer,
+  .kc-hero__copy,
+  .kc-shell-visual,
+  .kc-overview,
+  .kc-public-private,
+  .kc-pillars,
+  .kc-artifacts,
+  .kc-private,
+  .kc-evolution {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
 
