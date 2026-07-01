@@ -32,6 +32,12 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      # Backstop for the public/private boundary on data: the shipped telemetry
+      # fixture must remain schema-safe, DEMO_SYNTHETIC, and payload-free.
+      - name: Telemetry fixture backstop
+        run: node tools/validate-public-telemetry.mjs
+
       - run: npm run build
 
       - uses: actions/upload-pages-artifact@v3

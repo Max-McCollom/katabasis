@@ -31,10 +31,17 @@ else
   files="$(git ls-files)"
 fi
 
-# The proprietary token, assembled from fragments so that this script's own
-# bytes never contain the contiguous string it scans for (otherwise the
-# checker would block itself).
-SENTINEL="options""_bot"
+# Sentinel patterns (case-insensitive), one per line, each assembled from
+# fragments so this script's own bytes never contain the contiguous strings
+# it scans for (otherwise the checker would block itself). Covers the trading
+# system's name, the research repo's name, the scheduler label, the broker,
+# and absolute home paths — the class that actually leaked once through
+# allowlisted docs (662c4ff..c8be9d6) while the old single-token scan watched.
+SENTINELS="options""_bot
+strategy""-ledger
+weather""machine
+web""ull
+Users/""maxmccollom"
 
 deny_match() {
   case "$1" in
@@ -91,8 +98,15 @@ for f in $files; do
     violations=$((violations + 1))
     continue
   fi
-  if git show ":$f" 2>/dev/null | grep -Iq "$SENTINEL"; then
-    echo "  BLOCKED  [sentinel]         $f   (names the trading system)"
+  sentinel_hit=""
+  for pat in $SENTINELS; do
+    if git show ":$f" 2>/dev/null | grep -iIq "$pat"; then
+      sentinel_hit="$pat"
+      break
+    fi
+  done
+  if [ -n "$sentinel_hit" ]; then
+    echo "  BLOCKED  [sentinel]         $f   (contains a private-system token)"
     violations=$((violations + 1))
     continue
   fi

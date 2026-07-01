@@ -1,10 +1,12 @@
 #!/bin/sh
 # Katabasis pre-commit gate.
 #
-# Enforces the allowlist on staged files. This is the load-bearing local
-# control: on a public repo the commit is already public by the time CI runs,
-# so the gate must sit here, before the commit lands. Bypassable with
-# --no-verify; the real wall is isolation + allowlist + a sealed build.
+# Enforces the allowlist + sentinel on staged files, and validates the public
+# telemetry fixture whenever it (or its validator) is staged. This is the
+# load-bearing local control: on a public repo the commit is already public by
+# the time CI runs, so the gate must sit here, before the commit lands.
+# Bypassable with --no-verify; the real wall is isolation + allowlist + a
+# sealed build.
 set -eu
 
 ROOT="$(git rev-parse --show-toplevel)"
@@ -17,4 +19,13 @@ fi
 echo "katabasis: checking staged files against .allowlist ..."
 # Word-splitting is intentional: one path per argument.
 # shellcheck disable=SC2086
-exec "$ROOT/.githooks/allowlist-check.sh" $staged
+"$ROOT/.githooks/allowlist-check.sh" $staged
+
+case "$staged" in
+  *public/telemetry/*|*validate-public-telemetry*)
+    echo "katabasis: validating public telemetry fixture ..."
+    node "$ROOT/tools/validate-public-telemetry.mjs"
+    ;;
+esac
+
+exit 0
