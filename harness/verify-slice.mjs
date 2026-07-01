@@ -26,7 +26,7 @@ async function boot(url) {
 
 // === A. walk hall -> descent, then inspect the descent chapter ===
 {
-  const { browser, page, errors } = await boot('http://localhost:5173/')
+  const { browser, page, errors } = await boot('http://localhost:5173/estate')
   await sleep(3600) // past intro lock
   await page.keyboard.down('KeyW')
   await sleep(24000) // long walk: through the hall, through the arch, down the grand stair, to the balustrade
@@ -53,7 +53,7 @@ async function boot(url) {
 
 // === B. both minigame wins + persistence across reload ===
 {
-  const { browser, page } = await boot('http://localhost:5173/?solve=1')
+  const { browser, page } = await boot('http://localhost:5173/estate?solve=1')
   await sleep(3200) // veil gone
 
   await page.evaluate(() => window.__kbx.launch('astrolabe'))

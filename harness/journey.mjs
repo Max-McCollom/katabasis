@@ -16,7 +16,7 @@ const page = await browser.newPage()
 await page.setViewport({ width: 1280, height: 800, deviceScaleFactor: 1 })
 const errors = []
 page.on('pageerror', (e) => errors.push(e.message))
-await page.goto('http://localhost:5173/?solve=1', { waitUntil: 'networkidle0' }) // solve seed: each game is one click from win
+await page.goto('http://localhost:5173/estate?solve=1', { waitUntil: 'networkidle0' }) // solve seed: each game is one click from win
 for (let i = 0; i < 80; i++) {
   if (await page.evaluate(() => !!window.__kbx?.ready)) break
   await sleep(150)

@@ -26,7 +26,7 @@ async function boot(url) {
 
 // --- 1: arrival veil + movement + proximity prompt + real inspect path ---
 {
-  const { browser, page, errors } = await boot('http://localhost:5173/')
+  const { browser, page, errors } = await boot('http://localhost:5173/estate')
   await sleep(1100)
   await page.screenshot({ path: `${OUT}/verify-arrival.png` }) // veil should still be up (<2.9s)
   const veil = await page.evaluate(() => !!document.querySelector('.kb-veil:not(.is-gone)'))
@@ -57,7 +57,7 @@ async function boot(url) {
 
 // --- 5: collision (strafe into a wall, expect x clamped) ---
 {
-  const { browser, page } = await boot('http://localhost:5173/')
+  const { browser, page } = await boot('http://localhost:5173/estate')
   await sleep(3600)
   await page.keyboard.down('KeyD')
   await sleep(3000)
@@ -69,7 +69,7 @@ async function boot(url) {
 
 // --- 6: minigame WIN state (seed one click from solved, click, see win) ---
 {
-  const { browser, page } = await boot('http://localhost:5173/?solve=1')
+  const { browser, page } = await boot('http://localhost:5173/estate?solve=1')
   await page.evaluate(() => window.__kbx.launch('astrolabe'))
   await sleep(700)
   await page.evaluate(() => {

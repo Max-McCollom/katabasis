@@ -3,7 +3,7 @@
 import puppeteer from 'puppeteer-core'
 
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-const URL = 'http://localhost:5173/'
+const URL = 'http://localhost:5173/estate'
 const OUT = process.env.OUT || '.'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const errors = []
