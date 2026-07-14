@@ -1,10 +1,10 @@
 import React, { lazy, Suspense } from 'react'
-import Cockpit from './cockpit/Cockpit.jsx'
 
-// Code-split: the archived estate world (three.js + r3f + physics + audio +
-// the chapter copy it renders) loads ONLY on /estate. The default Cockpit
-// route ships none of it — every byte on '/' must be load-bearing.
+// The public dossier and the archived estate are separate bundles. A direct
+// visit to the public site does not load the 3D dependencies, and /estate does
+// not load the public-site stylesheet.
 const EstateApp = lazy(() => import('./EstateApp.jsx'))
+const PublicSite = lazy(() => import('./site/PublicSite.jsx'))
 
 export default function App() {
   const path = typeof window !== 'undefined' ? window.location.pathname : '/'
@@ -15,5 +15,9 @@ export default function App() {
       </Suspense>
     )
   }
-  return <Cockpit />
+  return (
+    <Suspense fallback={null}>
+      <PublicSite />
+    </Suspense>
+  )
 }

@@ -107,6 +107,14 @@ const SHOTS = {
 export default function EstateApp() {
   const post = useQuality((s) => s.post)
   useEffect(() => {
+    document.documentElement.classList.add('estate-route')
+    document.body.classList.add('estate-route')
+    return () => {
+      document.documentElement.classList.remove('estate-route')
+      document.body.classList.remove('estate-route')
+    }
+  }, [])
+  useEffect(() => {
     if (LOW && !HARNESS) useQuality.getState().stepDown()
   }, [])
   return (
