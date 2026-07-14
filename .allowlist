@@ -23,6 +23,7 @@ file:index.html
 file:public/CNAME
 file:public/telemetry/README.md
 file:tools/validate-public-telemetry.mjs
+file:tools/create-static-routes.mjs
 
 # -- source and assets ------------------------------------------------------
 dir:src/:html css js jsx glsl vert frag json svg
