@@ -19,6 +19,17 @@ fully static and has no connection to a live trading system.
 [Explore Katabasis](https://katabasis.rip/) ·
 [Max on LinkedIn](https://www.linkedin.com/in/max-mccollom-448bbb367/)
 
+## Public research pages
+
+The research index leads to individual studies with a question, comparison,
+design decisions, finding and limitations. The system overview presents six
+connected research functions with direct section links. All pages use the
+original Katabasis project identity. Institutional logos identify Max's
+university and former employer.
+
+The public case tables summarize the research design and interpretation;
+they are not performance datasets or live operating results.
+
 ## Safety model
 
 This is a public repository, so the gate against leakage sits before a commit,
