@@ -1,9 +1,10 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { researchCases } from '../src/site/research.js'
 import { systemPages } from '../src/site/systems.js'
+import { subsystemPath } from '../src/site/navigation.js'
 
 const routes = [
-  ['system/components', 'Subsystems and Engines | Katabasis', 'Explore data, discovery, observation, simulation, portfolio and research-operations components behind Katabasis.'],
+  ['system/components', 'Research Subsystems | Katabasis', 'Explore data, discovery, observation, simulation, portfolio and research-operations components behind Katabasis.'],
   ['system', 'Research & System Design | Katabasis', 'The research decisions and connected subsystems behind Katabasis, from market data and financial hypotheses to portfolio analysis and evidence review.'],
   ['work', 'Selected Markets Research | Katabasis', 'Portfolio risk controls, an eight-ETF comparison and a data-integrity investigation. Selected independent research by Max McCollom.'],
   ['work/portfolio-controls', 'Comparing Portfolio Risk Controls | Katabasis', 'A study of 26 portfolio-control configurations under three transaction-cost assumptions, examining growth, drawdown, tracking and turnover.'],
@@ -17,11 +18,11 @@ const routes = [
   ['archive', 'Visual Archive | Katabasis', 'An earlier visual exploration of the Katabasis project.'],
   ['estate', 'Katabasis | Visual Archive', 'The earlier interactive visual presentation of Katabasis.'],
 ]
-const expandedRoutes = new Map([...routes, ...researchCases.map(item => ['work/' + item.id, item.title + ' | Katabasis', item.summary]), ...systemPages.map(item => ['system/' + item.id, item.title + ' | Katabasis', item.deck])].map(item => [item[0], item]))
+const expandedRoutes = new Map([...routes, ...researchCases.map(item => ['work/' + item.id, item.title + ' | Katabasis', item.summary]), ...systemPages.flatMap(item => { const canonical = subsystemPath(item).replace(/^\/|\/$/g, ''); return [[canonical, item.title + ' | Katabasis', item.deck, canonical], ...((item.slug && item.slug !== item.id) ? [['system/' + item.id, item.title + ' | Katabasis', item.deck, canonical]] : [])] })].map(item => [item[0], item]))
 const base = readFileSync('dist/index.html', 'utf8')
 const escape = value => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;')
-for (const [route, title, description] of expandedRoutes.values()) {
-  const url = 'https://katabasis.rip/' + route + '/'
+for (const [route, title, description, canonical = route] of expandedRoutes.values()) {
+  const url = 'https://katabasis.rip/' + canonical + '/'
   const html = base
     .replace(/<title>[^<]*<\/title>/, '<title>' + escape(title) + '</title>')
     .replace(/(<meta\s+name="description"\s+content=")[^"]*"/, '$1' + escape(description) + '"')
@@ -30,6 +31,6 @@ for (const [route, title, description] of expandedRoutes.values()) {
     .replace(/(<meta property="og:url" content=")[^"]*"/, '$1' + url + '"')
     .replace(/(<link rel="canonical" href=")[^"]*"/, '$1' + url + '"')
   mkdirSync('dist/' + route, { recursive: true })
-  writeFileSync('dist/' + route + '/index.html', html)
+  writeFileSync('dist/' + route + '/index.html', route !== canonical ? html.replace('</head>', '<meta http-equiv="refresh" content="0;url=/' + canonical + '/" /></head>') : html)
 }
 writeFileSync('dist/404.html', base)

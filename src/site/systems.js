@@ -12,36 +12,37 @@ export const systemGroups = [
   {
     "id": "research-operations",
     "title": "Research operations",
-    "description": "Mission orchestration, evidence and readiness review, and a native interface for human decisions."
+    "description": "Research task coordination, evidence and readiness review, and a native interface for human decisions."
   }
 ];
 
 export const systemPages = [
   {
     "id": "data-factory",
-    "title": "Data Factory",
+    "slug": "data-measurement",
+    "title": "Market Data & Measurement",
     "group": "market-evidence",
     "deck": "Turn acquired records into inputs whose meaning, timing and limitations can be inspected.",
-    "purpose": "A market dataset can contain valid rows and still fail to measure what a research question requires. The Data Factory, Data Registry and feature-and-label components organize acquisition, source conventions and the distinction between information available at a decision and outcomes observed later.",
+    "purpose": "A market dataset can contain valid rows and still fail to measure what a research question requires. Acquisition, catalog and feature-and-label components organize source conventions and the distinction between information available at a decision and outcomes observed later.",
     "stage": "Implemented research components with recorded acquisition and data-quality investigations.",
     "components": [
       {
-        "name": "Factory substrate",
+        "name": "Market-data acquisition and normalization",
         "role": "Retains raw responses, normalizes market observations and records coverage and freshness.",
         "state": "Recorded acquisition and research artifacts."
       },
       {
-        "name": "Data Registry",
+        "name": "Data catalog and admission",
         "role": "Matches a research request to compatible inputs and preserves adjustment information.",
         "state": "Implemented source and consumer-specific checks."
       },
       {
-        "name": "Features and labels",
+        "name": "Decision-time features and outcome labels",
         "role": "Separates decision-time information from later outcomes used to evaluate a question.",
         "state": "Implemented pipeline; additional feature definitions remain in development."
       },
       {
-        "name": "Replay cache and full-chain archive",
+        "name": "Replay data cache and full-chain archive",
         "role": "Separates analysis-ready replay inputs from the archive retention needed to inspect coverage.",
         "state": "Source and test evidence; complete coverage is not established."
       }
@@ -56,7 +57,7 @@ export const systemPages = [
         "description": "Keep source records, timing, coverage and adjustment conventions with the normalized inputs."
       },
       {
-        "label": "Check the consumer",
+        "label": "Check measurement suitability",
         "description": "Determine whether the available fields satisfy this calculation, including compatibility between prices used together."
       },
       {
@@ -82,7 +83,7 @@ export const systemPages = [
       }
     ],
     "record": {
-      "title": "An input convention changed the interpretation",
+      "title": "Price-field incompatibility and corrected input requirements",
       "body": [
         "A placebo comparison challenged an apparent return pattern. Source review found incompatible corporate-action adjustments in prices used together. The useful result was tracing the apparent effect back to the meaning of the inputs.",
         "The corrected path requires compatible fields and the corrected evidence no longer supported the original pattern. This is a concrete connection between financial reasoning, a data requirement and a changed research conclusion."
@@ -94,32 +95,33 @@ export const systemPages = [
     "related": [
       {
         "href": "/work/data-mismatch/",
-        "label": "A placebo check for a return calculation"
+        "label": "Price-field compatibility and placebo testing"
       }
     ],
     "connections": [
       {
         "id": "hypothesis-discovery",
-        "label": "Hypothesis Discovery",
+        "label": "Hypothesis Specification & Discovery",
         "reason": "The financial question determines the required measurement."
       },
       {
         "id": "forward-observer",
-        "label": "Forward Observer",
+        "label": "Prospective Observation",
         "reason": "Later observations also need explicit coverage and source meaning."
       }
     ]
   },
   {
     "id": "hypothesis-discovery",
-    "title": "Hypothesis Discovery",
+    "slug": "hypothesis-discovery",
+    "title": "Hypothesis Specification & Discovery",
     "group": "market-evidence",
     "deck": "Make the economic explanation part of the research specification, before interpreting the output.",
     "purpose": "Discovery organizes proposed market relationships into questions that can be investigated. The framework asks what mechanism could produce an effect, who is on the other side, what constraint could sustain it and whether it remains practical at the intended scale. Those questions shape the research agenda.",
     "stage": "Implemented hypothesis records and review logic; template readiness varies.",
     "components": [
       {
-        "name": "Discovery cards and templates",
+        "name": "Hypothesis specifications and templates",
         "role": "Record the proposed mechanism, conditions, comparison and invalidation criteria.",
         "state": "Research implementation; some templates remain incomplete."
       },
@@ -129,7 +131,7 @@ export const systemPages = [
         "state": "Recorded design decisions incorporated into hypothesis review."
       },
       {
-        "name": "Research control plane",
+        "name": "Research routing and evidence classification",
         "role": "Classifies available evidence and routes the next research action.",
         "state": "Implemented orchestration, distinct from a completed financial finding."
       }
@@ -170,7 +172,7 @@ export const systemPages = [
       }
     ],
     "record": {
-      "title": "Improving the questions the system can ask",
+      "title": "Revision of counterparty and capacity requirements",
       "body": [
         "I required hypotheses to explain their mechanism, counterparty, sustaining constraint and intended scale. This made economic reasoning part of the review process, rather than an explanation attached after a result appeared.",
         "I later broadened the counterparty rubric so it could examine underpriced tails and long-convexity ideas alongside premium selling. The revision changed the opportunity set the research process could consider; it did not establish that any particular opportunity was exploitable."
@@ -182,13 +184,13 @@ export const systemPages = [
     "related": [
       {
         "href": "/work/hypothesis-design/",
-        "label": "Designing the financial hypothesis framework"
+        "label": "Economic mechanism and hypothesis specification"
       }
     ],
     "connections": [
       {
         "id": "data-factory",
-        "label": "Data Factory",
+        "label": "Market Data & Measurement",
         "reason": "A proposed mechanism needs a suitable measurement."
       },
       {
@@ -200,14 +202,15 @@ export const systemPages = [
   },
   {
     "id": "forward-observer",
-    "title": "Forward Observer",
+    "slug": "prospective-observation",
+    "title": "Prospective Observation",
     "group": "market-evidence",
     "deck": "Preserve later observations without confusing an observation session with an investment decision.",
-    "purpose": "Historical analysis can suggest a question that needs later evidence. The Forward Observer organizes observe-only sessions, captures relevant observations, joins outcomes after they become available and records what a session actually measured. An observation is useful only in relation to the question, its timing and its coverage.",
+    "purpose": "Historical analysis can suggest a question that needs later evidence. The prospective-observation workflow organizes observe-only sessions, captures relevant observations, joins outcomes after they become available and records what a session actually measured. An observation is useful only in relation to the question, its timing and its coverage.",
     "stage": "Implemented observation components with historical session records.",
     "components": [
       {
-        "name": "Forward Observer",
+        "name": "Prospective observation sessions",
         "role": "Records observe-only sessions, observations and session manifests.",
         "state": "Implemented with historical records."
       },
@@ -217,7 +220,7 @@ export const systemPages = [
         "state": "Research components with differing integration states."
       },
       {
-        "name": "Observer-to-scorer adapter",
+        "name": "Observation-to-evidence adapter",
         "role": "Reshapes observations and later outcomes for evidence evaluation.",
         "state": "Implemented; record construction still needs financial interpretation."
       },
@@ -263,7 +266,7 @@ export const systemPages = [
       }
     ],
     "record": {
-      "title": "Later evidence has its own completion test",
+      "title": "Prospective evidence coverage and completion",
       "body": [
         "The project has recorded observation sessions and adapters that connect their outputs to research evaluation. Their purpose is to retain an inspectable path from an observation to a later outcome, rather than silently replace a historical result with a stronger forward claim.",
         "Some later project records still contained missing measurements and incomplete readiness tracking. That distinction matters: a process can continue producing records while the financial evidence required for the original question remains incomplete."
@@ -275,13 +278,13 @@ export const systemPages = [
     "related": [
       {
         "href": "/work/narrowed-claim/",
-        "label": "Reproduction and robustness answer different questions"
+        "label": "Reproduction and observation sensitivity"
       }
     ],
     "connections": [
       {
         "id": "data-factory",
-        "label": "Data Factory",
+        "label": "Market Data & Measurement",
         "reason": "Observation quality depends on source meaning and coverage."
       },
       {
@@ -293,19 +296,20 @@ export const systemPages = [
   },
   {
     "id": "simulation-replay",
-    "title": "Simulation & Controlled Replay",
+    "slug": "simulation-replay",
+    "title": "Historical Simulation & Replay",
     "group": "evaluation",
     "deck": "Change a research choice while keeping the baseline and the rest of the comparison inspectable.",
-    "purpose": "Replay helps examine how a recorded outcome depends on a specific choice. The project includes historical option research, a Reflection workflow for limited counterfactual changes and timing-sensitivity checks. Recovering the baseline is a separate task from determining whether a proposed change improves the financial outcome.",
+    "purpose": "Replay helps examine how a recorded outcome depends on a specific choice. The project includes historical option research, a counterfactual-analysis workflow for limited counterfactual changes and timing-sensitivity checks. Recovering the baseline is a separate task from determining whether a proposed change improves the financial outcome.",
     "stage": "Implemented research tools with recorded historical counterfactual studies.",
     "components": [
       {
-        "name": "Options backtest and shadow research",
+        "name": "Historical options simulation and observe-only research",
         "role": "Models historical option outcomes under recorded selection, fill and exit assumptions.",
         "state": "Implemented and used in recorded research."
       },
       {
-        "name": "Reflection and controlled replay",
+        "name": "Counterfactual analysis and controlled replay",
         "role": "Reuses a recorded simulator to compare limited changes with a recovered control.",
         "state": "Recorded counterfactual studies."
       },
@@ -325,11 +329,11 @@ export const systemPages = [
         "description": "Keep the comparison focused so the question concerns the intended change rather than an entirely different experiment."
       },
       {
-        "label": "Read the whole outcome",
+        "label": "Evaluate aggregate outcomes",
         "description": "Assess prevented losses together with missed winners and aggregate modeled results."
       },
       {
-        "label": "Perturb the observation",
+        "label": "Test observation sensitivity",
         "description": "Check timing and missing-observation sensitivity before treating the conclusion as stable."
       }
     ],
@@ -351,7 +355,7 @@ export const systemPages = [
       }
     ],
     "record": {
-      "title": "A better subset did not imply a better total",
+      "title": "Subset and aggregate outcomes in controlled replay",
       "body": [
         "In a recorded exit-rule comparison, a tighter loss rule improved the average result among the cases that exited at that floor. It also truncated a large eventual winner and worsened the aggregate modeled result. The useful financial question was the total trade-off, not only the losses avoided.",
         "Separate timing checks showed that some conclusions depended on the observed timing and available samples. Another recorded review distinguished a successful reproduction from a robustness test that weakened part of the claim, preserving the two judgments independently."
@@ -363,7 +367,7 @@ export const systemPages = [
     "related": [
       {
         "href": "/work/narrowed-claim/",
-        "label": "Reproduction and robustness answer different questions"
+        "label": "Reproduction and observation sensitivity"
       }
     ],
     "connections": [
@@ -374,21 +378,22 @@ export const systemPages = [
       },
       {
         "id": "options-lab",
-        "label": "Options Exploration Lab",
+        "label": "Options Research & Experiment Design",
         "reason": "Broader experiments also need explicit models and complete outcomes."
       }
     ]
   },
   {
     "id": "evidence-evaluation",
+    "slug": "evidence-evaluation",
     "title": "Evidence Evaluation",
     "group": "evaluation",
     "deck": "Distinguish a completed calculation, a reproducible result and a supported financial claim.",
-    "purpose": "Evaluation connects recorded outcomes to the question they are supposed to answer. The Scorer, selection-accounting components and research acceptance boundary consider costs, uncertainty, related observations and the history of the research process. The purpose is to retain the reasons a conclusion is accepted, narrowed or left unresolved.",
+    "purpose": "Evaluation connects recorded outcomes to the question they are supposed to answer. Evidence-scoring, selection-accounting and research-acceptance components consider costs, uncertainty, related observations and the history of the research process. The purpose is to retain the reasons a conclusion is accepted, narrowed or left unresolved.",
     "stage": "Implemented scoring and acceptance components with uneven integration and bounded recorded analyses.",
     "components": [
       {
-        "name": "Scorer",
+        "name": "Evidence scoring",
         "role": "Evaluates registered outcomes, costs, tails and the adequacy of the evidence.",
         "state": "Core implementation and separate experimental modules."
       },
@@ -398,12 +403,12 @@ export const systemPages = [
         "state": "Implemented diagnostics; use varies across research paths."
       },
       {
-        "name": "Membrane",
+        "name": "Research acceptance checks",
         "role": "Checks the supporting research package and review conditions before candidate acceptance.",
         "state": "Implemented acceptance checker; acceptance is a research judgment."
       },
       {
-        "name": "Research wiki and records",
+        "name": "Research records and source index",
         "role": "Preserves hypotheses, sources, interpretations, corrections and rejected findings.",
         "state": "Recorded research history requiring primary-artifact corroboration."
       }
@@ -444,7 +449,7 @@ export const systemPages = [
       }
     ],
     "record": {
-      "title": "The claim was narrower than the successful rerun",
+      "title": "Reproduction and sensitivity produced different conclusions",
       "body": [
         "A recorded review recovered the original output from its inputs. A separate test changed an observation choice and did not support the full claim. The conclusion was narrowed rather than allowing the successful reproduction to erase the unfavorable sensitivity result.",
         "This distinction is also useful for source research. A real, correctly dated source can fail to support the complete hypothesis attached to it. The workflow therefore records the outcome of a task separately from the strength of the financial conclusion."
@@ -456,36 +461,37 @@ export const systemPages = [
     "related": [
       {
         "href": "/work/narrowed-claim/",
-        "label": "Reproduction and robustness answer different questions"
+        "label": "Reproduction and observation sensitivity"
       },
       {
         "href": "/work/data-mismatch/",
-        "label": "A placebo check for a return calculation"
+        "label": "Price-field compatibility and placebo testing"
       }
     ],
     "connections": [
       {
         "id": "hypothesis-discovery",
-        "label": "Hypothesis Discovery",
+        "label": "Hypothesis Specification & Discovery",
         "reason": "Evaluation needs a clearly bounded claim."
       },
       {
         "id": "governance",
-        "label": "Governance & Review",
+        "label": "Research Governance",
         "reason": "The conclusion and the next permitted action remain separate."
       }
     ]
   },
   {
     "id": "options-lab",
-    "title": "Options Exploration Lab",
+    "slug": "options-research",
+    "title": "Options Research & Experiment Design",
     "group": "evaluation",
     "deck": "Preserve the opportunity set and modeled outcomes, including the opportunities an experiment did not select.",
-    "purpose": "The Options Exploration Lab supports recorded-data experiments in option research. Its design retains selected and unselected opportunities, modeled fills and no-fills, lifecycle outcomes and relationships among observations. This makes the denominator of an experiment inspectable and helps distinguish many generated assignments from repeated evidence for a hypothesis.",
+    "purpose": "The options-research workflow supports recorded-data experiments in option research. Its design retains selected and unselected opportunities, modeled fills and no-fills, lifecycle outcomes and relationships among observations. This makes the denominator of an experiment inspectable and helps distinguish many generated assignments from repeated evidence for a hypothesis.",
     "stage": "A recorded-data research campaign and separate synthetic acceptance tests.",
     "components": [
       {
-        "name": "Options Exploration Lab",
+        "name": "Options experiment design",
         "role": "Organizes experiments over a retained opportunity census and records the resulting assignments.",
         "state": "Implemented with a recorded market-data campaign."
       },
@@ -495,7 +501,7 @@ export const systemPages = [
         "state": "Research models with explicit assumptions."
       },
       {
-        "name": "Campaign scoring",
+        "name": "Experiment evidence scoring",
         "role": "Keeps dependence, selection and holdout considerations attached to the campaign record.",
         "state": "Recorded scoring; the model-guided branch remains an untrained placeholder."
       }
@@ -536,7 +542,7 @@ export const systemPages = [
       }
     ],
     "record": {
-      "title": "More output did not resolve the evidence problem",
+      "title": "Insufficient repetition within related experiment groups",
       "body": [
         "A recorded-data campaign preserved opportunities, assignments and dependence groupings. Review found that many one-off configurations left too little repeated evidence within individual scoring groups. The campaign was useful for identifying that experimental-design problem.",
         "The resulting question was how to repeat predefined families over distinct observations, rather than interpret the number of assignments as independent confirmation. Separate synthetic acceptance tests exercised system behavior; they were not combined with the recorded-data campaign as market evidence."
@@ -548,13 +554,13 @@ export const systemPages = [
     "related": [
       {
         "href": "/work/narrowed-claim/",
-        "label": "Reproduction and robustness answer different questions"
+        "label": "Reproduction and observation sensitivity"
       }
     ],
     "connections": [
       {
         "id": "simulation-replay",
-        "label": "Simulation & Controlled Replay",
+        "label": "Historical Simulation & Replay",
         "reason": "A modeled outcome needs an explicit comparison and execution assumptions."
       },
       {
@@ -566,7 +572,8 @@ export const systemPages = [
   },
   {
     "id": "portfolio-research",
-    "title": "Portfolio Research",
+    "slug": "portfolio-analysis",
+    "title": "Portfolio Analysis",
     "group": "evaluation",
     "deck": "Connect investment products and risk controls to the objective they are meant to serve.",
     "purpose": "Portfolio research makes the trade-off explicit: protection, participation, allocation tracking and trading costs do not always improve together. The project includes an eight-fund investment-product comparison, historical studies of portfolio controls and report-only checks that connect portfolio state to research and review.",
@@ -583,14 +590,14 @@ export const systemPages = [
         "state": "Recorded historical studies under transaction-cost assumptions."
       },
       {
-        "name": "Portfolio Governor",
+        "name": "Portfolio monitoring and reconciliation",
         "role": "Reports allocation drift, marks, cash differences and policy integrity for review.",
         "state": "Report-only probes; some risk measures are simplified proxies."
       }
     ],
     "flow": [
       {
-        "label": "Define the portfolio job",
+        "label": "Define the portfolio objective",
         "description": "State whether the question concerns cash management, income, growth, protection or allocation tracking."
       },
       {
@@ -598,7 +605,7 @@ export const systemPages = [
         "description": "Assess products within their roles and controls against explicit objectives."
       },
       {
-        "label": "Read the trade-offs",
+        "label": "Evaluate portfolio trade-offs",
         "description": "Consider growth, drawdown, history coverage, turnover and costs together."
       },
       {
@@ -624,7 +631,7 @@ export const systemPages = [
       }
     ],
     "record": {
-      "title": "An affirmative rebalancing result, within a bounded study",
+      "title": "Historical rebalancing criteria under transaction-cost assumptions",
       "body": [
         "The portfolio-control study compared 26 configurations under three transaction-cost assumptions. A rebalancing band met the study's historical allocation-tracking and turnover criteria. This was a result about a defined portfolio objective, rather than a claim that one control was universally best.",
         "The eight-ETF comparison addressed a different question. It distinguished cash-management, dividend-equity and option-income roles and incorporated gaps in fund history into risk scenarios. Together, the studies show how the intended portfolio function changes the comparison and the interpretation."
@@ -636,17 +643,17 @@ export const systemPages = [
     "related": [
       {
         "href": "/work/portfolio-controls/",
-        "label": "Comparing portfolio risk controls"
+        "label": "Portfolio risk-control comparison"
       },
       {
         "href": "/work/etf-comparison/",
-        "label": "Comparing income and cash-management ETFs"
+        "label": "Income and cash-management ETF comparison"
       }
     ],
     "connections": [
       {
         "id": "data-factory",
-        "label": "Data Factory",
+        "label": "Market Data & Measurement",
         "reason": "The investment comparison depends on compatible history and clear inputs."
       },
       {
@@ -658,15 +665,16 @@ export const systemPages = [
   },
   {
     "id": "research-executive",
-    "title": "Research Executive",
+    "slug": "research-orchestration",
+    "title": "Research Orchestration",
     "group": "research-operations",
     "deck": "Organize a research question into bounded work while preserving sources, disagreements and revisions.",
-    "purpose": "The Executive connects research questions, dependent tasks, budget decisions and evidence records. Its role is to preserve the path from the original question to the current conclusion, including unsuccessful work and reasons to change the plan. Completing an assignment and establishing a financial claim remain different outcomes.",
-    "stage": "Implemented mission workflow with recorded demonstrations and distinct evidence-review outcomes.",
+    "purpose": "Research orchestration connects research questions, dependent tasks, budget decisions and evidence records. Its role is to preserve the path from the original question to the current conclusion, including unsuccessful work and reasons to change the plan. Completing an assignment and establishing a financial claim remain different outcomes.",
+    "stage": "Implemented research-assignment workflow with recorded demonstrations and distinct evidence-review outcomes.",
     "components": [
       {
-        "name": "Executive",
-        "role": "Stores bounded missions, task routes, budget decisions, revisions and recovery state.",
+        "name": "Task orchestration",
+        "role": "Stores bounded research assignments, task routes, budget decisions, revisions and recovery state.",
         "state": "Implemented with recorded demonstrations."
       },
       {
@@ -682,19 +690,19 @@ export const systemPages = [
     ],
     "flow": [
       {
-        "label": "Frame the mission",
+        "label": "Specify the research question",
         "description": "State the research question and the bounds of the work before dividing it into tasks."
       },
       {
         "label": "Route dependent work",
-        "description": "Keep task relationships, required inputs and budget decisions attached to the mission."
+        "description": "Keep task relationships, required inputs and budget decisions attached to the research assignment."
       },
       {
         "label": "Compare the evidence",
         "description": "Retain source claims and competing information without equating successful retrieval with support."
       },
       {
-        "label": "Revise or conclude",
+        "label": "Revise the plan or conclusion",
         "description": "Preserve why the question changed, what remains unresolved and what requires human review."
       }
     ],
@@ -716,13 +724,13 @@ export const systemPages = [
       }
     ],
     "record": {
-      "title": "A real source did not settle the attached hypothesis",
+      "title": "Source validity and hypothesis support are separate",
       "body": [
         "Recorded demonstrations included successful factual tasks and conclusions that failed evidence review. A genuine, correctly dated source did not necessarily support the full hypothesis attached to it. The system therefore needed to preserve what the source actually established.",
-        "The design makes an unresolved or rejected conclusion a legitimate outcome of completed work. Source research, local analysis and synthesis can contribute different evidence to the same mission, while the record retains the question, task history and reasons for revision."
+        "The design makes an unresolved or rejected conclusion a legitimate outcome of completed work. Source research, local analysis and synthesis can contribute different evidence to the same research question, while the record retains the question, task history and reasons for revision."
       ],
       "kind": "Recorded research-workflow and evidence review",
-      "sourceLabel": "Source review: November 2026; recorded Executive demonstrations and evidence reviews.",
+      "sourceLabel": "Source review: November 2026; recorded task-orchestration demonstrations and evidence reviews.",
       "limitation": "Successful factual demonstrations do not establish investment-thesis quality. Separate AI review sessions are not independent expert verification, and heuristic confidence is not a calibrated investment probability."
     },
     "related": [
@@ -734,38 +742,39 @@ export const systemPages = [
     "connections": [
       {
         "id": "narrative-pilot",
-        "label": "Narrative Pilot",
+        "label": "Information Timing & Coverage",
         "reason": "Information gathering needs coverage, timing and research-cost discipline."
       },
       {
         "id": "operator-console",
-        "label": "Operator Console",
-        "reason": "Mission state and unresolved questions need to reach human review."
+        "label": "Research Monitoring & Review",
+        "reason": "Research-assignment state and unresolved questions need to reach human review."
       }
     ]
   },
   {
     "id": "narrative-pilot",
-    "title": "Narrative Pilot",
+    "slug": "information-timing",
+    "title": "Information Timing & Coverage",
     "group": "market-evidence",
     "deck": "Evaluate whether an information source earns its cost, coverage and place in the research process.",
-    "purpose": "The pilot collected public social and news material and compared its coverage and timing with market events under investigation. The financial question was whether the information arrived early enough, covered the relevant universe and added useful evidence. Successful collection alone could not answer those questions.",
-    "stage": "Recorded pilot and coverage review; selective follow-up specified rather than fully implemented.",
+    "purpose": "The study collected public social and news material and compared its coverage and timing with market events under investigation. The financial question was whether the information arrived early enough, covered the relevant universe and added useful evidence. Successful collection alone could not answer those questions.",
+    "stage": "Recorded study and coverage review; selective follow-up specified rather than fully implemented.",
     "components": [
       {
-        "name": "Narrative sampler",
-        "role": "Captures public social and news records for a bounded pilot.",
+        "name": "Information-source collection",
+        "role": "Captures public social and news records for a bounded study.",
         "state": "Historical capture implementation; selective follow-up remains in development."
       },
       {
-        "name": "Pilot coverage review",
+        "name": "Source-coverage review",
         "role": "Examines record quality, source outages, universe overlap and information timing.",
         "state": "Recorded analysis and independently recounted capture records."
       },
       {
         "name": "Selective follow-up specification",
         "role": "Narrows sources and defines collection costs and stop-or-continue criteria.",
-        "state": "Follow-up design includes collection budgets; sampler integration remains in development."
+        "state": "Follow-up design includes collection budgets; collection integration remains in development."
       }
     ],
     "flow": [
@@ -782,7 +791,7 @@ export const systemPages = [
         "description": "Ask whether information preceded the event rather than merely describing it afterward."
       },
       {
-        "label": "Decide what merits another pilot",
+        "label": "Evaluate the need for further study",
         "description": "Specify narrower sources, costs and continuation criteria based on the observed weaknesses."
       }
     ],
@@ -795,7 +804,7 @@ export const systemPages = [
       {
         "decision": "Make coverage failures visible",
         "rationale": "Source saturation and outages change what an apparent absence of information means.",
-        "consequence": "Missing coverage became part of interpreting the pilot."
+        "consequence": "Missing coverage became part of interpreting the study."
       },
       {
         "decision": "Specify a more selective follow-up",
@@ -804,14 +813,14 @@ export const systemPages = [
       }
     ],
     "record": {
-      "title": "The next research design changed after the pilot",
+      "title": "Coverage findings and revised collection specification",
       "body": [
-        "The recorded pilot found no persuasive early information pattern within its bounded analysis. Universe mismatch, saturation and outages limited what the captured material could say about the market events being studied. A subsequent recount supported the integrity of the capture records, not a prediction claim.",
-        "The follow-up specification narrowed the sources, moved collection earlier and added cost and stop-or-continue criteria. This is a research-design outcome: the pilot changed the next question and collection plan. The specified improvements should not be represented as an already deployed predictive engine."
+        "The recorded study found no persuasive early information pattern within its bounded analysis. Universe mismatch, saturation and outages limited what the captured material could say about the market events being studied. A subsequent recount supported the integrity of the capture records, not a prediction claim.",
+        "The follow-up specification narrowed the sources, moved collection earlier and added cost and stop-or-continue criteria. This is a research-design outcome: the study changed the next question and collection plan. The specified improvements should not be represented as an already deployed predictive engine."
       ],
-      "kind": "Recorded alternative-data pilot and follow-up design",
-      "sourceLabel": "Source review: November 2026; recorded pilot, coverage analysis and follow-up specification.",
-      "limitation": "A short historical pilot cannot settle whether narratives generally lead prices. The selective redesign remains partly specified, so realized savings or predictive success are not established."
+      "kind": "Recorded alternative-data study and follow-up design",
+      "sourceLabel": "Source review: November 2026; recorded study, coverage analysis and follow-up specification.",
+      "limitation": "A short historical study cannot settle whether narratives generally lead prices. The selective redesign remains partly specified, so realized savings or predictive success are not established."
     },
     "related": [
       {
@@ -822,36 +831,37 @@ export const systemPages = [
     "connections": [
       {
         "id": "research-executive",
-        "label": "Research Executive",
+        "label": "Research Orchestration",
         "reason": "Source gathering contributes evidence to a bounded research question."
       },
       {
         "id": "data-factory",
-        "label": "Data Factory",
+        "label": "Market Data & Measurement",
         "reason": "Coverage and missingness matter alongside captured content."
       }
     ]
   },
   {
     "id": "governance",
-    "title": "Governance & Review",
+    "slug": "research-governance",
+    "title": "Research Governance",
     "group": "research-operations",
     "deck": "Keep research conclusions, system readiness and the next human decision distinct.",
     "purpose": "Governance components organize evidence requirements, research state and readiness for subsequent work. The important distinction is practical: a specified design, an implemented component, a deployment and an observed run are different forms of evidence. A successful research task does not remove the need for the relevant review.",
     "stage": "Implemented research and readiness controls with incomplete operating integrations.",
     "components": [
       {
-        "name": "Research control plane",
+        "name": "Research routing and evidence classification",
         "role": "Classifies evidence and routes the next research action.",
         "state": "Implemented research orchestration."
       },
       {
-        "name": "System Governor",
+        "name": "Research monitoring",
         "role": "Detects stale sources, missing consumers and inconsistent research registrations.",
         "state": "Implemented components and recorded findings; current liveness was not remeasured."
       },
       {
-        "name": "Progress clock",
+        "name": "Research progress monitoring",
         "role": "Uses knowledge artifacts to examine research progress and stagnation.",
         "state": "A landed implementation and configuration exist; installed operation was not established."
       },
@@ -861,12 +871,12 @@ export const systemPages = [
         "state": "Implemented contracts with differing completion states."
       },
       {
-        "name": "Research charters and staged work",
+        "name": "Research specifications and staged work",
         "role": "Preserves research directions, handoffs, queued work and the system inventory.",
         "state": "Recorded governance artifacts; some machinery remains inactive."
       },
       {
-        "name": "Operating supervision",
+        "name": "Service monitoring",
         "role": "Organizes freshness checks, watchdogs, drills, incident findings and escalation.",
         "state": "Mixed implemented and contract-only components; current liveness was not remeasured."
       }
@@ -885,7 +895,7 @@ export const systemPages = [
         "description": "Keep the reason for a block or required review attached to the relevant work."
       },
       {
-        "label": "Return the decision to review",
+        "label": "Present findings for review",
         "description": "Present what is known and what remains unresolved without allowing completion language to replace evidence."
       }
     ],
@@ -907,10 +917,10 @@ export const systemPages = [
       }
     ],
     "record": {
-      "title": "An explicit record of what is ready for the next step",
+      "title": "Readiness classification and unresolved integration",
       "body": [
         "The readiness model distinguishes intended design, implementation, deployment and observed operation. Evidence in one category cannot silently stand in for the others. This gives a review a specific question: what has actually been demonstrated for the next step?",
-        "The System Governor contributes findings about stale sources, missing consumers and inconsistent registrations. The progress-clock implementation adds a way to examine research progress through knowledge artifacts. Its source and configuration exist, while installed operation remains a separate readiness question."
+        "Research monitoring contributes findings about stale sources, missing consumers and inconsistent registrations. The research-progress monitoring implementation adds a way to examine research progress through knowledge artifacts. Its source and configuration exist, while installed operation remains a separate readiness question."
       ],
       "kind": "Source and readiness review",
       "sourceLabel": "Source review: November 2026; component inventory and recorded readiness distinctions.",
@@ -930,36 +940,37 @@ export const systemPages = [
       },
       {
         "id": "operator-console",
-        "label": "Operator Console",
+        "label": "Research Monitoring & Review",
         "reason": "Findings and missing evidence need a readable human review surface."
       }
     ]
   },
   {
     "id": "operator-console",
-    "title": "Operator Console",
+    "slug": "research-monitoring",
+    "title": "Research Monitoring & Review",
     "group": "research-operations",
-    "deck": "Bring missions, evidence and source state into a surface for deliberate human review.",
-    "purpose": "The native console and bridge project research and mission records into a read-only interface. The design distinguishes fresh, stale, unavailable and fixture information so a reader can understand what is being shown. A recorded intention and an executed action are also separate outcomes.",
+    "deck": "Present research assignments, evidence and source state for human review.",
+    "purpose": "The native research interface presents research assignments, evidence and source state through a read-only projection. The design distinguishes fresh, stale, unavailable and fixture information so a reader can understand what is being shown. A recorded intention and an executed action are also separate outcomes.",
     "stage": "Native interface source and recorded render and test artifacts.",
     "components": [
       {
-        "name": "Native console",
-        "role": "Presents research missions, evidence and source state for review.",
+        "name": "Native research interface",
+        "role": "Presents research assignments, evidence and source state for review.",
         "state": "Native interface source and recorded render artifacts."
       },
       {
-        "name": "Read-only bridge",
+        "name": "Read-only projection",
         "role": "Projects underlying research records into the interface without turning a view into an action.",
         "state": "Implemented projection components."
       },
       {
-        "name": "Decision receipts",
+        "name": "Decision-intent records",
         "role": "Retains a record of an operator intention and its associated review context.",
         "state": "Receipt service records intent rather than executing it."
       },
       {
-        "name": "Freshness and evidence surfaces",
+        "name": "Source freshness and evidence state",
         "role": "Distinguishes stale, unavailable and fixture state from usable current records.",
         "state": "Implemented source and recorded interface tests."
       }
@@ -967,7 +978,7 @@ export const systemPages = [
     "flow": [
       {
         "label": "Read the underlying state",
-        "description": "Use mission, evidence and source records as inputs to the projection."
+        "description": "Use assignment, evidence and source records as inputs to the projection."
       },
       {
         "label": "Preserve the state distinction",
@@ -1000,13 +1011,13 @@ export const systemPages = [
       }
     ],
     "record": {
-      "title": "A review surface has to preserve uncertainty",
+      "title": "Research-state projection and decision-intent records",
       "body": [
-        "The project contains native interface source, a bridge and recorded render and test artifacts. Its role is to make research state accessible to a human reader, including mission questions, evidence and the quality of the available source state.",
-        "The decision-receipt service is a particularly important boundary. It records intent; it does not itself execute the action. The public explanation can therefore show how a finding reaches review without implying that an attractive interface establishes an autonomous investment operation."
+        "The project contains native interface source, a read-only projection and recorded render and test artifacts. Its role is to make research state accessible to a human reader, including research questions, evidence and the quality of the available source state.",
+        "The decision-intent record service is a particularly important boundary. It records intent; it does not itself execute the action. The public explanation can therefore show how a finding reaches review without implying that an attractive interface establishes an autonomous investment operation."
       ],
       "kind": "Recorded interface and source review",
-      "sourceLabel": "Source review: November 2026; native console source and recorded interface artifacts.",
+      "sourceLabel": "Source review: November 2026; native research interface source and recorded interface artifacts.",
       "limitation": "Source and render artifacts establish interface work, not current service availability. Fixture displays and recorded intentions must remain distinct from observed operating outcomes."
     },
     "related": [
@@ -1018,12 +1029,12 @@ export const systemPages = [
     "connections": [
       {
         "id": "research-executive",
-        "label": "Research Executive",
-        "reason": "Mission history and unresolved questions supply the review context."
+        "label": "Research Orchestration",
+        "reason": "Research history and unresolved questions supply the review context."
       },
       {
         "id": "governance",
-        "label": "Governance & Review",
+        "label": "Research Governance",
         "reason": "A readable state still requires the appropriate evidence and review."
       }
     ]

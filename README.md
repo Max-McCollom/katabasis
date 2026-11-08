@@ -28,12 +28,22 @@ evidence, analysis and evaluation, and research operations. A searchable
 directory, section navigation, breadcrumbs and related-study links support
 exploration at different levels of depth.
 
-The guides cover the Data Factory, Hypothesis Discovery, Forward Observer,
-Simulation and Controlled Replay, Evidence Evaluation, Options Exploration
-Lab, Portfolio Research, Research Executive, Narrative Pilot, Governance
-and Review, and Operator Console. They distinguish documented research,
-implemented components and unfinished integration work. These are guide
-families, rather than a count of independent trading engines.
+The guides cover market data and measurement, hypothesis specification,
+prospective observation, information timing, historical simulation, evidence
+evaluation, options experiment design, portfolio analysis, research orchestration,
+governance and monitoring. They distinguish documented research, implemented
+components and unfinished integration work. These are guide families, rather
+than a count of independent trading engines. Earlier guide URLs redirect to the
+current functional names.
+
+The selectable architecture map distinguishes research relationships from
+three documented handoff schematics. Each guide includes a procedure diagram
+and relevant result or review exhibits. Five case pages include recorded outputs:
+a cost-sensitivity criteria matrix, product-research decisions, price-field
+compatibility analysis, a hypothesis-rubric revision, and separate reproduction
+and sensitivity findings. Figures label recorded findings and explanatory
+schematics, retain their interpretation limits, and include source-review dates.
+No invented return series, private thresholds or raw system screens are used.
 
 All pages use the original Katabasis project identity. Institutional logos
 identify Max's university and former employer.

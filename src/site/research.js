@@ -1,7 +1,7 @@
 export const researchCases = [
   {
     "id": "portfolio-controls",
-    "title": "Comparing portfolio risk controls",
+    "title": "Portfolio risk-control comparison",
     "category": "Portfolio research",
     "summary": "A study of 26 portfolio-control configurations under three transaction-cost assumptions, examining growth, drawdown, tracking and turnover.",
     "scope": "26 configurations; three transaction-cost assumptions; separate historical development and holdout periods for the relevant family.",
@@ -10,7 +10,7 @@ export const researchCases = [
     "decision": "Identified a rebalancing band that met the study's historical tracking and turnover criteria. Assessed protection alongside participation in market gains and trading costs.",
     "limitation": "The historical simulations used simplified price, cash-return and execution assumptions. Results depend on those choices and do not establish future performance.",
     "comparison": {
-      "heading": "A result has to meet the full portfolio objective",
+      "heading": "Portfolio objectives and recorded decisions",
       "caption": "Historical findings and resulting research decisions",
       "headers": [
         "Question tested",
@@ -48,7 +48,7 @@ export const researchCases = [
         "rationale": "A result depends on the historical period and the assumed cost of trading, so both belong in the evaluation."
       },
       {
-        "title": "Weigh the full trade-off",
+        "title": "Evaluate the joint criteria",
         "body": "Assessed drawdown protection together with growth, allocation tracking and turnover to determine which approach met the stated criteria.",
         "rationale": "Reducing losses alone does not settle whether a control meets the portfolio objective."
       }
@@ -74,7 +74,7 @@ export const researchCases = [
   },
   {
     "id": "etf-comparison",
-    "title": "Comparing income and cash-management ETFs",
+    "title": "Income and cash-management ETF comparison",
     "category": "Investment research",
     "summary": "An eight-fund comparison organized by portfolio role, liquidity, fees and historical drawdown.",
     "scope": "Eight funds across cash-management, dividend-equity and option-income roles.",
@@ -83,7 +83,7 @@ export const researchCases = [
     "decision": "Compared cash-like, dividend-equity and option-income products within their respective roles, and incorporated inception-history limitations into risk scenarios.",
     "limitation": "Fund histories differ in length and market coverage. Historical analogs depend on the comparison chosen and cannot guarantee a future loss limit.",
     "comparison": {
-      "heading": "Portfolio role changes the comparison",
+      "heading": "Product roles and comparison criteria",
       "caption": "Eight-fund comparison framework",
       "headers": [
         "Dimension",
@@ -151,7 +151,7 @@ export const researchCases = [
   },
   {
     "id": "data-mismatch",
-    "title": "A placebo check for a return calculation",
+    "title": "Price-field compatibility and placebo testing",
     "category": "Data integrity",
     "summary": "An investigation of an apparent return pattern that traced the calculation back to incompatible price adjustments.",
     "scope": "Placebo comparison, price-convention review and corrected analysis; the original and corrected test populations differ.",
@@ -160,7 +160,7 @@ export const researchCases = [
     "decision": "Required compatible price fields in the corrected analysis. The corrected evidence no longer supported the original pattern.",
     "limitation": "The original and corrected analyses used different test populations. Their comparison is not a paired estimate of the correction alone, and other data paths require their own checks.",
     "comparison": {
-      "heading": "The conclusion changed when the inputs were corrected",
+      "heading": "Input compatibility and corrected interpretation",
       "caption": "Analysis decisions and conclusions",
       "headers": [
         "Analysis",
@@ -183,7 +183,7 @@ export const researchCases = [
     },
     "steps": [
       {
-        "title": "Question the pattern",
+        "title": "Test alternative explanations",
         "body": "Used a placebo comparison that did not rely on the proposed market mechanism and examined whether the apparent effect remained.",
         "rationale": "A comparison outside the proposed mechanism helps question whether the market explanation accounts for the result."
       },
@@ -219,7 +219,7 @@ export const researchCases = [
   },
   {
     "id": "hypothesis-design",
-    "title": "Designing hypotheses around an economic mechanism",
+    "title": "Economic mechanism and hypothesis specification",
     "category": "Research design",
     "summary": "A revision to the hypothesis framework made counterparty incentives, market constraints and practical capacity explicit, while allowing both premium-selling and long-convexity explanations.",
     "scope": "A documented framework revision incorporated into hypothesis specifications and research review; not a return or trading-strategy result.",
@@ -228,7 +228,7 @@ export const researchCases = [
     "decision": "Specified questions about economic mechanism, counterparty incentives, constraints and capacity. Broadened the counterparty rubric so it could also examine who might underprice a tail, rather than presume every opportunity involved selling a premium.",
     "limitation": "A plausible mechanism helps define and prioritize research. It does not establish an exploitable return, adequate measurement or a successfully tested strategy.",
     "comparison": {
-      "heading": "The framework shapes the opportunity set",
+      "heading": "Hypothesis requirements and framework revision",
       "caption": "Hypothesis requirements and the reason for revising them",
       "headers": [
         "Research requirement",
@@ -266,7 +266,7 @@ export const researchCases = [
         "rationale": "A statistical pattern alone does not explain why a relationship could remain available to an investor."
       },
       {
-        "title": "Check the framework for directional bias",
+        "title": "Assess directional bias in the framework",
         "body": "Broadened premium-selling language to include long-convexity hypotheses and the question of who might underprice a tail.",
         "rationale": "The standards used to review an idea also influence which ideas the system can consider."
       },
@@ -297,7 +297,7 @@ export const researchCases = [
   },
   {
     "id": "narrowed-claim",
-    "title": "Separating reproduction from robustness",
+    "title": "Reproduction and observation sensitivity",
     "category": "Historical research",
     "summary": "An exact rerun reproduced a recorded result. A separate test of sensitivity to an observation choice weakened part of the claim, so the conclusion was narrowed.",
     "scope": "Recorded baseline reproduction and a separate observation-sensitivity comparison in historical research.",
@@ -306,7 +306,7 @@ export const researchCases = [
     "decision": "Recorded reproduction of the baseline separately from the sensitivity test. Retained only the portion of the conclusion supported by both, rather than treating a successful rerun as evidence for the full claim.",
     "limitation": "The comparison concerns a narrow set of recorded historical observations. It does not establish a generally robust strategy, an optimal observation rule or future performance.",
     "comparison": {
-      "heading": "Two tests answer different questions",
+      "heading": "Reproduction, sensitivity and conclusion",
       "caption": "Recorded results and the conclusions they permit",
       "headers": [
         "Test",
@@ -339,7 +339,7 @@ export const researchCases = [
         "rationale": "A sensitivity comparison needs a baseline whose reproduction is understood."
       },
       {
-        "title": "Ask a separate robustness question",
+        "title": "Test observation sensitivity",
         "body": "Compared the claim with a test that changed an observation choice, keeping its result distinct from the exact rerun.",
         "rationale": "Repeating the same calculation does not test whether the conclusion depends on that research choice."
       },
