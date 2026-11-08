@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#23221f"/>
+  <path d="M75 72h38M80 82h28M85 92h18M90 102h8" fill="none" stroke="#f2efe6" stroke-width="2"/>
+  <text x="132" y="100" fill="#f2efe6" font-family="Georgia,serif" font-size="40">Katabasis</text>
+  <path d="M75 145h1050" stroke="#666257"/>
+  <text x="75" y="265" fill="#f2efe6" font-family="Georgia,serif" font-size="70">Independent markets</text>
+  <text x="75" y="345" fill="#f2efe6" font-family="Georgia,serif" font-size="70">research.</text>
+  <text x="75" y="415" fill="#d8d3c7" font-family="Arial,sans-serif" font-size="25">Portfolio analysis · Financial hypotheses · Data validation</text>
+  <text x="75" y="525" fill="#f2efe6" font-family="Arial,sans-serif" font-size="25">Max McCollom</text>
+  <text x="75" y="565" fill="#bbb5a8" font-family="Arial,sans-serif" font-size="20">Columbia University · Financial Economics</text>
+  <text x="1125" y="565" text-anchor="end" fill="#bbb5a8" font-family="Arial,sans-serif" font-size="20">katabasis.rip</text>
+</svg>

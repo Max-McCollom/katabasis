@@ -1,8 +1,23 @@
 # Katabasis
 
-The public showcase site for Katabasis. This repository contains the site and
-nothing else: no trading logic, no strategy detail, no data, and no connection
-to any live system. It is a standalone, fully static presentation artifact.
+Katabasis is an independent markets research project by Max McCollom, a
+Financial Economics student at Columbia University planning a minor in
+Mathematics. Started in April 2026, it examines how market data, assumptions
+and portfolio constraints shape investment and trading decisions.
+
+Max defines the financial questions, selects methods and data, designs the
+research process and evaluates results. The work spans portfolio analysis,
+hypothesis evaluation and data validation, with a focus on making assumptions,
+comparisons and conclusions reviewable. AI generates the implementation code
+from his specifications.
+
+This repository contains the source for the public presentation website. It
+shares high-level system design and sanitized case studies. The research
+implementation and working data are maintained separately. The website is
+fully static and has no connection to a live trading system.
+
+[Explore Katabasis](https://katabasis.rip/) ·
+[Max on LinkedIn](https://www.linkedin.com/in/max-mccollom-448bbb367/)
 
 ## Safety model
 

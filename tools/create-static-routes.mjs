@@ -1,21 +1,31 @@
-import { copyFileSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 
 const routes = [
-  'system',
-  'work',
-  'work/data-mismatch',
-  'work/narrowed-claim',
-  'notes',
-  'notes/safe-refusal',
-  'about',
-  'archive',
-  'estate',
+  ['system', 'Research & System Design | Katabasis', 'The research decisions and connected subsystems behind Katabasis, from market data and financial hypotheses to portfolio analysis and evidence review.'],
+  ['work', 'Selected Markets Research | Katabasis', 'Portfolio risk controls, an eight-ETF comparison and a data-integrity investigation. Selected independent research by Max McCollom.'],
+  ['work/portfolio-controls', 'Comparing Portfolio Risk Controls | Katabasis', 'A study of 26 portfolio-control configurations under three transaction-cost assumptions, examining growth, drawdown, tracking and turnover.'],
+  ['work/etf-comparison', 'Comparing Income and Cash-Management ETFs | Katabasis', 'An eight-fund comparison organized by portfolio role, liquidity, fees and historical drawdown.'],
+  ['work/data-mismatch', 'A Placebo Check for a Return Calculation | Katabasis', 'An investigation of an apparent return pattern that traced the calculation back to incompatible price adjustments.'],
+  ['work/narrowed-claim', 'Reproduction & Robustness | Katabasis', 'A research case about separating an exact reproduction from robustness to an observation choice.'],
+  ['notes', 'Research Notes | Katabasis', 'Notes on research design, reproducibility and evidence from the Katabasis project.'],
+  ['notes/safe-refusal', 'Research Permissions | Katabasis', 'How the research workflow distinguishes execution, research outcomes and operator permissions.'],
+  ['about', 'Max McCollom | Columbia Financial Economics', 'Financial Economics at Columbia University, planned Mathematics minor, expected May 2029. Creator of Katabasis since April 2026.'],
+  ['credits', 'Image Credits | Katabasis', 'Sources for the institutional identity images used on the site.'],
+  ['archive', 'Visual Archive | Katabasis', 'An earlier visual exploration of the Katabasis project.'],
+  ['estate', 'Katabasis | Visual Archive', 'The earlier interactive visual presentation of Katabasis.'],
 ]
-
-for (const route of routes) {
-  const directory = `dist/${route}`
-  mkdirSync(directory, { recursive: true })
-  copyFileSync('dist/index.html', `${directory}/index.html`)
+const base = readFileSync('dist/index.html', 'utf8')
+const escape = value => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;')
+for (const [route, title, description] of routes) {
+  const url = 'https://katabasis.rip/' + route + '/'
+  const html = base
+    .replace(/<title>[^<]*<\/title>/, '<title>' + escape(title) + '</title>')
+    .replace(/(<meta\s+name="description"\s+content=")[^"]*"/, '$1' + escape(description) + '"')
+    .replace(/(<meta property="og:title" content=")[^"]*"/, '$1' + escape(title) + '"')
+    .replace(/(<meta property="og:description" content=")[^"]*"/, '$1' + escape(description) + '"')
+    .replace(/(<meta property="og:url" content=")[^"]*"/, '$1' + url + '"')
+    .replace(/(<link rel="canonical" href=")[^"]*"/, '$1' + url + '"')
+  mkdirSync('dist/' + route, { recursive: true })
+  writeFileSync('dist/' + route + '/index.html', html)
 }
-
-copyFileSync('dist/index.html', 'dist/404.html')
+writeFileSync('dist/404.html', base)

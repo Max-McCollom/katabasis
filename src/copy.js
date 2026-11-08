@@ -52,7 +52,7 @@ export const chapters = [
 export const creator = {
   name: 'Max McCollom',
   paragraphs: [
-    "I'm studying financial economics at Columbia University. I started building Katabasis in June 2026.",
+    "I'm studying financial economics at Columbia University. I started building Katabasis in April 2026.",
     'The problem I work on is the one most systematic research avoids: telling a real edge apart from a result that only looks like one. Katabasis is built around that question, end to end. It runs live now, at small size, and most of what it does stays private.',
   ],
 }

@@ -24,6 +24,7 @@ file:public/CNAME
 file:public/telemetry/README.md
 file:tools/validate-public-telemetry.mjs
 file:tools/create-static-routes.mjs
+file:public/research/katabasis-overview.pdf
 
 # -- source and assets ------------------------------------------------------
 dir:src/:html css js jsx glsl vert frag json svg
