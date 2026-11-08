@@ -21,11 +21,22 @@ fully static and has no connection to a live trading system.
 
 ## Public research pages
 
-The research index leads to individual studies with a question, comparison,
-design decisions, finding and limitations. The system overview presents six
-connected research functions with direct section links. All pages use the
-original Katabasis project identity. Institutional logos identify Max's
-university and former employer.
+The research index leads to five studies with a question, comparison,
+design decisions, recorded findings and limitations. The system overview
+connects the research flow to eleven subsystem guides, grouped into market
+evidence, analysis and evaluation, and research operations. A searchable
+directory, section navigation, breadcrumbs and related-study links support
+exploration at different levels of depth.
+
+The guides cover the Data Factory, Hypothesis Discovery, Forward Observer,
+Simulation and Controlled Replay, Evidence Evaluation, Options Exploration
+Lab, Portfolio Research, Research Executive, Narrative Pilot, Governance
+and Review, and Operator Console. They distinguish documented research,
+implemented components and unfinished integration work. These are guide
+families, rather than a count of independent trading engines.
+
+All pages use the original Katabasis project identity. Institutional logos
+identify Max's university and former employer.
 
 The public case tables summarize the research design and interpretation;
 they are not performance datasets or live operating results.

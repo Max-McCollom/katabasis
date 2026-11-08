@@ -1,22 +1,25 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { researchCases } from './research.js'
+import { systemGroups, systemPages } from './systems.js'
 import './site.css'
 
 const linkedin = 'https://www.linkedin.com/in/max-mccollom-448bbb367/'
 const source = 'https://github.com/Max-McCollom/katabasis'
 const originalMark = '/media/katabasis-original.png'
 
-const layers = [
-  { id: 'data-sources', name: 'Market data & sources', short: 'Know what the inputs mean.', purpose: 'Make the evidence comparable before drawing a financial conclusion.', design: 'I choose the data requirements and checks around source dates, corporate-action adjustments and history coverage.', output: 'Inputs whose source, timing and limitations can be inspected.', example: 'A placebo test exposed incompatible price adjustments in a return calculation.', href: '/work/data-mismatch/', linkLabel: 'Price-adjustment investigation' },
-  { id: 'financial-hypotheses', name: 'Financial hypotheses', short: 'Explain the economic mechanism.', purpose: 'Turn a plausible market story into a question that can be investigated.', design: 'I specify the mechanism, counterparty incentives, market constraints and capacity considerations, then define what would weaken the claim.', output: 'A research specification with competing explanations and invalidation criteria.', example: 'The research framework asks who is on the other side of an opportunity and why the proposed effect could persist.' },
-  { id: 'historical-analysis', name: 'Historical analysis', short: 'Test the question against evidence.', purpose: 'Compare a proposed relationship with alternatives and check how sensitive it is to the analysis choices.', design: 'I define comparisons, historical periods, cost assumptions and diagnostic tests. Controlled replay and recorded inputs support review.', output: 'Study results that distinguish an executed calculation from a supported conclusion.', example: 'Portfolio controls were compared on growth, drawdown, allocation tracking and turnover.', href: '/work/portfolio-controls/', linkLabel: 'Portfolio-control comparison' },
-  { id: 'portfolio-research', name: 'Portfolio research', short: 'Connect the analysis to an objective.', purpose: 'Understand how an investment choice changes portfolio behavior.', design: 'I compare products by their role and evaluate controls against explicit objectives for risk, participation and the cost of trading.', output: 'Comparisons with the trade-offs and history limitations stated.', example: 'An eight-ETF comparison separates cash-management, dividend-equity and option-income roles.', href: '/work/etf-comparison/', linkLabel: 'Eight-fund ETF comparison' },
-  { id: 'evidence-workflow', name: 'Evidence & research workflow', short: 'Keep the reasoning inspectable.', purpose: 'Preserve the path from the original question to the current conclusion.', design: 'I designed the workflow around mission questions, dependent tasks, source records, hypothesis updates and reasons for changing a plan.', output: 'Research records that retain unresolved questions and the evidence behind revisions.', example: 'Source research, local analysis and synthesis can contribute different kinds of evidence to the same question.', href: '/work/narrowed-claim/', linkLabel: 'Reproduction and robustness note' },
-  { id: 'interfaces-controls', name: 'Interfaces & controls', short: 'Support deliberate decisions.', purpose: 'Make research state and required human actions visible.', design: 'The system includes an operator interface, recorded run outcomes and permission checks. The research director is read-only.', output: 'A clear distinction between completed work, a research result and permission to act.', example: 'A refused task can leave the research question open while preserving its state for review.', href: '/notes/safe-refusal/', linkLabel: 'Research permissions note' },
+const overviewFlow = [
+  { id: 'financial-hypotheses', slug: 'hypothesis-discovery', label: 'Define the financial question', description: 'Specify the mechanism, competing explanations and evidence required.' },
+  { id: 'data-sources', slug: 'data-factory', label: 'Prepare usable observations', description: 'Check timing, field meaning and whether the data measures the intended quantity.' },
+  { id: 'historical-analysis', slug: 'simulation-replay', label: 'Compare and replay', description: 'Retain the baseline and examine changes in assumptions or portfolio rules.' },
+  { id: 'evidence-workflow', slug: 'evidence-evaluation', label: 'Evaluate the claim', description: 'Consider costs, dependence, selection and sensitivity before interpreting a result.' },
+  { id: 'portfolio-research', slug: 'portfolio-research', label: 'Assess portfolio implications', description: 'Connect product and risk-control comparisons to an explicit objective.' },
+  { id: 'interfaces-controls', slug: 'operator-console', label: 'Review the decision', description: 'Make the evidence, unresolved questions and required human actions visible.' },
 ]
+const featuredSubsystemIds = ['data-factory', 'hypothesis-discovery', 'simulation-replay', 'portfolio-research', 'research-executive', 'operator-console']
 
 const routes = {
   '/': ['home', 'Katabasis | Markets Research by Max McCollom', 'Independent markets and investment research by Max McCollom, Financial Economics at Columbia University. Portfolio studies, financial hypotheses and evidence review.'],
+  '/system/components': ['components', 'Subsystems and Engines | Katabasis', 'Explore the actual data, discovery, observation, simulation, portfolio and research-operations components behind Katabasis.'],
   '/system': ['system', 'Research & System Design | Katabasis', 'The research decisions and connected subsystems behind Katabasis, from market data and financial hypotheses to portfolio analysis and evidence review.'],
   '/work': ['work', 'Selected Markets Research | Katabasis', 'Portfolio risk controls, an eight-ETF comparison and a data-integrity investigation. Selected independent research by Max McCollom.'],
   '/about': ['about', 'Max McCollom | Columbia Financial Economics', 'Financial Economics at Columbia University, planned Mathematics minor, expected May 2029. Creator of Katabasis since April 2026.'],
@@ -29,6 +32,8 @@ const routes = {
 
 function currentRoute() {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
+  const subsystem = systemPages.find(item => '/system/' + item.id === path)
+  if (subsystem) return { page: 'subsystem', subsystem, title: subsystem.title + ' | Katabasis', description: subsystem.deck }
   const study = researchCases.find(item => '/work/' + item.id === path)
   return study ? { page: 'case', study, title: study.title + ' | Katabasis', description: study.summary } :
     routes[path] ? { page: routes[path][0], title: routes[path][1], description: routes[path][2] } :
@@ -42,7 +47,7 @@ function Mark({ full = false }) {
 }
 
 function Header({ page }) {
-  const section = page === 'case' ? 'work' : ['refusal', 'robustness'].includes(page) ? 'notes' : page
+  const section = ['components', 'subsystem'].includes(page) ? 'system' : page === 'case' ? 'work' : ['refusal', 'robustness'].includes(page) ? 'notes' : page
   const links = [
     { page: 'work', href: '/work/', label: 'Research' },
     { page: 'system', href: '/system/', label: 'System' },
@@ -61,7 +66,7 @@ function Header({ page }) {
 function Footer() {
   return <footer className="site-footer"><div className="shell footer-inner">
     <div className="footer-brand"><a href="/">Katabasis</a><p>Independent markets research by Max McCollom.</p></div>
-    <nav className="footer-links" aria-label="Resources"><a href="/research/katabasis-overview.pdf">Research overview PDF</a><a href={source} target="_blank" rel="noreferrer">Website source</a><a href={linkedin} target="_blank" rel="noreferrer">LinkedIn</a></nav>
+    <nav className="footer-links" aria-label="Resources"><a href="/system/components/">Subsystem directory</a><a href="/research/katabasis-overview.pdf">Research overview PDF</a><a href={source} target="_blank" rel="noreferrer">Website source</a><a href={linkedin} target="_blank" rel="noreferrer">LinkedIn</a></nav>
     <div className="footer-meta"><span>April 2026–present · New York</span><a href="/archive/">Visual archive</a><a href="/credits/">Image credits</a></div>
   </div></footer>
 }
@@ -74,7 +79,7 @@ function Shell({ route, children }) {
     document.querySelector('meta[name="description"]')?.setAttribute('content', route.description)
     return () => { document.documentElement.classList.remove('public-site-route'); document.body.classList.remove('public-site-route') }
   }, [route.title, route.description])
-  return <><a className="skip-link" href="#main">Skip to content</a><Header page={route.page} /><main id="main" tabIndex="-1">{children}</main><Footer /></>
+  return <><a className="skip-link" href={['system', 'components', 'subsystem'].includes(route.page) ? '#system-content' : '#main'}>Skip to content</a><Header page={route.page} />{['system', 'components', 'subsystem'].includes(route.page) && <SystemSectionNav page={route.page} />}<main id="main" tabIndex="-1">{children}</main><Footer /></>
 }
 
 function Breadcrumbs({ items }) {
@@ -97,9 +102,9 @@ function ResearchTable({ id, caption, headers, rows, note }) {
   </table></div>{note && <p className="table-note">{note}</p>}</>
 }
 
-function ResearchRows({ headingLevel = 3 } = {}) {
+function ResearchRows({ headingLevel = 3, limit } = {}) {
   const Heading = headingLevel === 2 ? 'h2' : 'h3'
-  return <div className="research-list">{researchCases.map(study => <article className="research-row" key={study.id}>
+  return <div className="research-list">{researchCases.slice(0, limit).map(study => <article className="research-row" key={study.id}>
     <p className="research-category">{study.category}</p>
     <div className="research-copy"><Heading><a href={'/work/' + study.id + '/'}>{study.title}</a></Heading><p className="research-question">{study.question}</p></div>
     <dl className="research-facts"><div><dt>Key decision</dt><dd>{study.keyDecision}</dd></div><div><dt>Scope</dt><dd>{study.scope}</dd></div></dl>
@@ -115,20 +120,20 @@ function Home({ route }) {
     <section className="home-intro shell" aria-labelledby="project-title"><div className="intro-copy"><p className="section-label">Independent markets & investment research</p><h1 id="project-title">Katabasis</h1><p className="page-lede">Independent research by Max McCollom, Financial Economics at Columbia University.</p><p>Katabasis connects financial hypotheses, market data, historical comparisons and portfolio research. I define the questions and methods, design the system and interpret the findings.</p><p className="intro-meta">April 2026–present · New York</p><div className="intro-actions"><a className="button" href="/work/">Explore the research</a><a className="text-link" href="/system/">System and design</a></div></div>
       <aside className="intro-finding" aria-labelledby="selected-finding-title"><p className="section-label">From the portfolio-control study</p><h2 id="selected-finding-title">Protection, participation and trading costs</h2><p>Compared 26 configurations under three transaction-cost assumptions, examining growth, drawdown, tracking and turnover.</p><p className="finding-copy"><strong>Selected finding.</strong> A rebalancing band met the study's historical tracking and turnover criteria.</p><p className="limitation">Historical simulation with simplified prices, cash returns and execution. Findings do not establish future performance.</p><a className="text-link" href="/work/portfolio-controls/">Inspect the comparison</a></aside>
     </section>
-    <section className="research-section shell section-block" aria-labelledby="home-research-title"><div className="section-heading"><div><h2 id="home-research-title">Selected studies</h2><p>Financial questions, research choices and the decisions that followed.</p></div><a className="text-link" href="/work/">All research</a></div><ResearchRows /></section>
-    <section className="system-overview shell section-block" aria-labelledby="system-overview-title"><div className="section-heading"><div><h2 id="system-overview-title">One connected research process</h2><p>Six layers connect the market question to usable evidence, portfolio implications and review.</p></div><a className="text-link" href="/system/">Explore the system</a></div><ul className="layer-directory">{layers.map(layer => <li key={layer.id}><a href={'/system/#' + layer.id}>{layer.name}</a><p>{layer.purpose}</p></li>)}</ul></section>
+    <section className="research-section shell section-block" aria-labelledby="home-research-title"><div className="section-heading"><div><h2 id="home-research-title">Selected studies</h2><p>Financial questions, research choices and the decisions that followed.</p></div><a className="text-link" href="/work/">All research</a></div><ResearchRows limit={3} /></section>
+    <section className="system-overview shell section-block" aria-labelledby="system-overview-title"><div className="section-heading"><div><h2 id="system-overview-title">One connected research process</h2><p>Explore the actual components that connect market evidence, analysis, portfolio research and human review.</p></div><a className="text-link" href="/system/">Explore the system</a></div><ul className="layer-directory">{featuredSubsystemIds.map(id => systemPages.find(item => item.id === id)).filter(Boolean).map(item => <li key={item.id}><a href={'/system/' + item.id + '/'}>{item.title}</a><p>{item.deck}</p></li>)}</ul></section>
     <Ownership />
     <section className="about-preview split-section shell section-block"><div><h2>Operating analysis and energy research</h2><p>My work at Ridgewood Water combined analysis in Excel with responsibility for municipal operating systems. My academic research includes energy cost and grid reliability.</p></div><div><p>I am seeking internships in markets and investment research, portfolio risk, and energy or commodities analysis. New York is my first choice.</p><a className="text-link" href="/about/">Background and experience</a></div></section>
   </Shell>
 }
 
 function Work({ route }) {
-  return <Shell route={route}><header className="page-heading shell"><Breadcrumbs items={[{ label: 'Research' }]} /><h1>Selected research</h1><p className="page-lede">Portfolio controls, investment-product comparisons and the data behind an apparent market pattern.</p><p>Each study explains the question, the comparison, the design choices and the limits of the conclusion.</p></header><section className="shell work-rows" aria-label="Research studies"><ResearchRows headingLevel={2} /></section><Ownership /></Shell>
+  return <Shell route={route}><header className="page-heading shell"><Breadcrumbs items={[{ label: 'Research' }]} /><h1>Selected research</h1><p className="page-lede">Portfolio analysis, hypothesis design and the reliability of market evidence.</p><p>Each study explains the question, the comparison, the design choices and the limits of the conclusion.</p></header><section className="shell work-rows" aria-label="Research studies"><ResearchRows headingLevel={2} /></section><Ownership /></Shell>
 }
 
 function Case({ route }) {
   const study = route.study
-  const toc = [{ id: 'finding', label: 'Finding and limits' }, { id: 'question', label: 'Research question' }, { id: 'comparison', label: 'The comparison' }, { id: 'design', label: 'Design decisions' }, { id: 'interpretation', label: 'What the work demonstrates' }]
+  const toc = [{ id: 'finding', label: 'Finding and limits' }, { id: 'question', label: 'Research question' }, { id: 'comparison', label: 'The comparison' }, { id: 'design', label: 'Design decisions' }, { id: 'record', label: 'Recorded work' }, { id: 'subsystems', label: 'Related subsystems' }, { id: 'interpretation', label: 'What the work demonstrates' }]
   const related = researchCases.filter(item => item.id !== study.id)
   return <Shell route={route}><article><header className="case-heading page-heading shell"><Breadcrumbs items={[{ label: 'Research', href: '/work/' }, { label: study.title }]} /><p className="section-label">{study.category} · Independent study</p><h1>{study.title}</h1><p className="page-lede">{study.summary}</p><p className="article-byline">Research design and evaluation by Max McCollom</p><ul className="tag-list" aria-label="Research topics">{study.tags.map(tag => <li key={tag}>{tag}</li>)}</ul></header>
       <div className="article-layout case-layout shell"><PageToc items={toc} /><div className="article-body case-body">
@@ -136,22 +141,57 @@ function Case({ route }) {
         <section id="question" aria-labelledby="question-title" tabIndex="-1"><h2 id="question-title">The financial question</h2><p className="case-question">{study.question}</p><dl className="study-scope"><div><dt>Study scope</dt><dd>{study.scope}</dd></div></dl></section>
         <section id="comparison" aria-labelledby="comparison-title" tabIndex="-1"><h2 id="comparison-title">{study.comparison.heading}</h2><ResearchTable id={study.id + '-comparison'} {...study.comparison} /></section>
         <section id="design" aria-labelledby="design-title" tabIndex="-1"><h2 id="design-title">Why the study was designed this way</h2><ResearchTable id={study.id + '-design'} caption="Research decisions and their rationale" headers={['Decision', 'What I specified', 'Why it matters']} rows={study.steps.map(step => [step.title, step.body, step.rationale])} /></section>
+        {study.record && <section id="record" aria-labelledby="record-title" tabIndex="-1"><h2 id="record-title">The recorded research decision</h2><div className="evidence-record"><p className="section-label">{study.record.kind}</p>{study.record.body.map(paragraph => <p key={paragraph}>{paragraph}</p>)}<p className="record-meta">{study.record.sourceLabel}</p></div></section>}
+        <section id="subsystems" aria-labelledby="subsystems-title" tabIndex="-1"><h2 id="subsystems-title">The system behind this study</h2><ul className="linked-system-list">{(study.systems || []).map(id => systemPages.find(item => item.id === id)).filter(Boolean).map(item => <li key={item.id}><a href={'/system/' + item.id + '/'}>{item.title}</a><p>{item.deck}</p></li>)}</ul></section>
         <section id="interpretation" aria-labelledby="interpretation-title" tabIndex="-1"><h2 id="interpretation-title">What this work demonstrates</h2><p>{study.relevance}</p><a className="text-link" href="/system/">See the connected research process</a></section>
         <nav className="related-links" aria-label="Related research"><h2>Other studies</h2><ul>{related.map(item => <li key={item.id}><a href={'/work/' + item.id + '/'}>{item.title}</a></li>)}</ul><a href="/work/">Return to all research</a></nav>
       </div></div></article></Shell>
 }
 
+function SystemSectionNav({ page }) {
+  return <nav className="section-nav shell" aria-label="System navigation"><a href="/system/" aria-current={page === 'system' ? 'page' : undefined}>Overview</a><a href="/system/components/" aria-current={page === 'components' ? 'page' : page === 'subsystem' ? 'location' : undefined}>Subsystems</a><a href="/work/">Research studies</a></nav>
+}
+
+function SubsystemNav({ active }) {
+  const contents = <>{systemGroups.map(group => <div className="subsystem-nav-group" key={group.id}><h3>{group.title}</h3><ul>{systemPages.filter(item => item.group === group.id).map(item => <li key={item.id}><a href={'/system/' + item.id + '/'} aria-current={active === item.id ? 'page' : undefined}>{item.title}</a></li>)}</ul></div>)}</>
+  return <><aside className="subsystem-sidebar"><nav aria-label="Explore subsystems"><h2>Explore the system</h2><a className="subsystem-overview-link" href="/system/">System overview</a>{contents}</nav></aside><details className="subsystem-nav-mobile"><summary>Explore subsystems</summary><nav aria-label="Explore subsystems">{contents}</nav></details></>
+}
+
 function System({ route }) {
-  const toc = [...layers.map(layer => ({ id: layer.id, label: layer.name })), { id: 'research-standards', label: 'Research standards' }, { id: 'implementation', label: 'Implementation and scope' }]
-  const examples = layers.map(layer => [<a href={'#' + layer.id}>{layer.name}</a>, layer.purpose, <a href={layer.href || '#' + layer.id}>{layer.linkLabel || 'Economic mechanism and competing explanations'}</a>])
-  return <Shell route={route}><header className="page-heading shell"><Breadcrumbs items={[{ label: 'System' }]} /><h1>The research system</h1><p className="page-lede">From the financial question to the evidence behind a portfolio decision.</p><p>I organized Katabasis around defining a mechanism, choosing usable evidence, comparing alternatives and retaining the reasoning behind a decision. The six layers below describe their purpose, the choices I made and the outputs the system preserves.</p></header>
-    <div className="article-layout system-layout shell"><PageToc items={toc} system /><div className="article-body system-sections">
-      <section className="system-map" aria-labelledby="system-map-title"><h2 id="system-map-title">Where the layers appear in public work</h2><ResearchTable id="system-examples" caption="Research layers and public examples" headers={['Layer', 'Purpose', 'Example or design record']} rows={examples} /></section>
-      {layers.map(layer => <section className="system-layer system-section" id={layer.id} aria-labelledby={layer.id + '-title'} key={layer.id} tabIndex="-1"><div className="layer-title"><h2 id={layer.id + '-title'}>{layer.name}</h2><p>{layer.short}</p></div><p className="layer-purpose">{layer.purpose}</p><dl className="layer-record"><div><dt>My design decision</dt><dd>{layer.design}</dd></div><div><dt>What the system preserves</dt><dd>{layer.output}</dd></div></dl><div className="layer-example"><h3>In practice</h3><p>{layer.example}</p>{layer.href && <a className="text-link" href={layer.href}>{layer.linkLabel}</a>}</div></section>)}
-      <section id="research-standards" className="design-principles" aria-labelledby="research-standards-title" tabIndex="-1"><h2 id="research-standards-title">Research standards</h2><p>A financial hypothesis needs an explanation of why an effect could exist and what evidence would make the explanation weaker. Mechanism, counterparty incentives, constraints and capacity belong in that explanation.</p><dl className="principle-list"><div><dt>Specify the comparison</dt><dd>State the objective and alternatives before interpreting the output.</dd></div><div><dt>Keep assumptions visible</dt><dd>Record data coverage, historical periods, costs and important simplifications.</dd></div><div><dt>Separate the outcomes</dt><dd>A completed calculation, a reproducible result and a supported financial claim are different judgments.</dd></div><div><dt>Preserve the reason for change</dt><dd>Retain why a hypothesis, research task or conclusion was revised.</dd></div></dl></section>
-      <section id="implementation" className="implementation" aria-labelledby="implementation-title" tabIndex="-1"><h2 id="implementation-title">Implementation and project scope</h2><p>I set the questions, methods, data choices, system structure, tests and interpretation. AI generates the implementation code from those specifications.</p><p>The broader project includes market-data and options-research components, controlled replay, portfolio studies, source-based research workflows and an operator interface. These components are at different stages of development.</p><p>The public site presents selected studies and design decisions. Historical study results do not establish live investment performance.</p><nav className="related-links" aria-label="Further project context"><a href="/notes/">Research notes</a><a href="/about/">About Max and the project</a></nav></section>
-    </div></div>
-  </Shell>
+  const studyIds = ['portfolio-controls', 'hypothesis-design', 'data-mismatch', 'narrowed-claim']
+  const studies = studyIds.map(id => researchCases.find(item => item.id === id)).filter(Boolean)
+  return <Shell route={route}><div className="dossier-layout shell"><SubsystemNav /><article className="dossier-body" id="system-content" tabIndex="-1"><header className="dossier-heading"><Breadcrumbs items={[{ label: 'System' }]} /><p className="section-label">The Katabasis research system</p><h1>From market questions to research decisions</h1><p className="page-lede">Data infrastructure, discovery, simulation, evidence evaluation, portfolio research and the tools that keep the work reviewable.</p><p>I designed Katabasis as a connected research process. Its components preserve what was observed, what was assumed, what was tested and why a conclusion changed.</p><a className="text-link" href="/system/components/">Browse all subsystem guides</a></header>
+    <section className="dossier-section" aria-labelledby="research-flow-title"><h2 id="research-flow-title">How the work connects</h2><p>This is the research flow. Questions return to earlier stages when a measurement, comparison or result needs to be revised.</p><ol className="system-flow">{overviewFlow.map(step => <li id={step.id} key={step.id}><a href={'/system/' + step.slug + '/'}>{step.label}</a><p>{step.description}</p></li>)}</ol><div className="flow-branches"><p><a href="/system/research-executive/">The Research Executive</a> coordinates questions, dependent tasks, source records and plan revisions across the work.</p><p><a href="/system/governance/">Governance and readiness controls</a> distinguish research evidence, human review and permission to act.</p></div></section>
+    <section className="dossier-section" aria-labelledby="scope-title"><h2 id="scope-title">What sits inside the project</h2><div className="system-group-summary">{systemGroups.map(group => <section key={group.id}><h3><a href={'/system/components/#' + group.id}>{group.title}</a></h3><p>{group.description || systemPages.filter(item => item.group === group.id).map(item => item.title).join(', ') + '.'}</p></section>)}</div><p>The guides group related components by the work they support. They include implemented research tools, recorded studies, diagnostics and development foundations. Each guide explains its own stage and documented output.</p></section>
+    <section className="dossier-section" aria-labelledby="decisions-title"><h2 id="decisions-title">Decisions the research produced</h2><ResearchTable id="system-decisions" caption="Selected studies and recorded decisions" headers={['Research record', 'Finding or design decision']} rows={studies.map(item => [<a href={'/work/' + item.id + '/'}>{item.title}</a>, item.keyDecision])} /><p className="table-note">These are selected research conclusions and design revisions. The full cases explain their scope and limits.</p></section>
+    <section className="dossier-section" aria-labelledby="ownership-system-title"><h2 id="ownership-system-title">My role in the system</h2><p>I set the financial questions, choose methods and data requirements, design the functional relationships and evaluation criteria, and interpret the findings. AI generates the implementation code from my specifications.</p><p>The subsystem guides connect those choices to concrete components and recorded work. The public website presents research and system design; it does not connect to private operating state.</p></section>
+    <nav className="dossier-next" aria-label="Continue exploring"><a href="/system/components/">Explore the subsystem directory</a><a href="/work/">Read the research cases</a></nav>
+  </article></div></Shell>
+}
+
+function Components({ route }) {
+  const [query, setQuery] = useState('')
+  const needle = query.trim().toLowerCase()
+  const visible = systemPages.filter(item => [item.title, item.deck, item.purpose, ...item.components.map(component => component.name + ' ' + component.role)].join(' ').toLowerCase().includes(needle))
+  return <Shell route={route}><div className="dossier-layout shell"><SubsystemNav /><article className="dossier-body" id="system-content" tabIndex="-1"><header className="dossier-heading"><Breadcrumbs items={[{ label: 'System', href: '/system/' }, { label: 'Subsystems' }]} /><h1>Subsystems and engines</h1><p className="page-lede">Explore the actual component families behind Katabasis, their design decisions and the work recorded so far.</p><p>Choose an area directly, or find a component by its name or research purpose.</p></header><div className="directory-search"><label htmlFor="subsystem-search">Find a subsystem</label><div><input id="subsystem-search" type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Name, purpose or component" />{query && <button type="button" onClick={() => setQuery('')}>Clear search</button>}</div><p role="status">{visible.length} {visible.length === 1 ? 'guide' : 'guides'}{needle ? ' matching “' + query + '”' : ' across the research system'}</p></div>
+    <div className="system-directory">{systemGroups.map(group => { const items = visible.filter(item => item.group === group.id); return items.length ? <section id={group.id} key={group.id} tabIndex="-1"><h2>{group.title}</h2>{items.map(item => <article className="system-directory-row" key={item.id}><h3><a href={'/system/' + item.id + '/'}>{item.title}</a></h3><p>{item.deck}</p><p className="component-state"><strong>Documented scope.</strong> {item.stage}</p><p className="result-preview"><strong>In the record.</strong> {item.record.title}</p></article>)}</section> : null })}{!visible.length && <div className="directory-empty"><h2>No matching subsystem</h2><p>Try a research task such as data, replay, portfolio, evidence or missions.</p><button type="button" onClick={() => setQuery('')}>Show all subsystems</button></div>}</div>
+  </article></div></Shell>
+}
+
+function Subsystem({ route }) {
+  const item = route.subsystem
+  const group = systemGroups.find(group => group.id === item.group)
+  const index = systemPages.findIndex(page => page.id === item.id)
+  const previous = systemPages[index - 1], next = systemPages[index + 1]
+  const connections = item.connections.map(connection => ({ ...connection, target: systemPages.find(page => page.id === connection.id) })).filter(connection => connection.target)
+  return <Shell route={route}><div className="dossier-layout shell"><SubsystemNav active={item.id} /><article className="dossier-body" id="system-content" tabIndex="-1"><header className="dossier-heading"><Breadcrumbs items={[{ label: 'System', href: '/system/' }, { label: 'Subsystems', href: '/system/components/' }, { label: item.title }]} /><p className="section-label">{group?.title}</p><h1>{item.title}</h1><p className="page-lede">{item.deck}</p><p className="record-meta">Project source review · November 2026</p><nav className="content-jumps" aria-label="On this page"><a href="#purpose">Purpose and flow</a><a href="#components">Components</a><a href="#design">Design decisions</a><a href="#record">Recorded work</a><a href="#connections">Connections</a></nav></header>
+    <section id="purpose" className="dossier-section" tabIndex="-1"><h2>The research purpose</h2><p>{item.purpose}</p><ol className="subsystem-flow">{item.flow.map(step => <li key={step.label}><h3>{step.label}</h3><p>{step.description}</p></li>)}</ol></section>
+    <section id="components" className="dossier-section" tabIndex="-1"><h2>Components and responsibilities</h2><ResearchTable id={item.id + '-components'} caption={item.title + ': component roles'} headers={['Component', 'Research role', 'Documented state']} rows={item.components.map(component => [component.name, component.role, component.state])} /><p className="readiness-note">{item.stage}</p></section>
+    <section id="design" className="dossier-section" tabIndex="-1"><h2>Design decisions and their consequences</h2><div className="decision-records">{item.decisions.map(decision => <section className="decision-record" key={decision.decision}><h3>{decision.decision}</h3><dl><div><dt>Rationale</dt><dd>{decision.rationale}</dd></div><div><dt>Consequence for the research</dt><dd>{decision.consequence}</dd></div></dl></section>)}</div></section>
+    <section id="record" className="dossier-section" tabIndex="-1"><h2>What the record shows</h2><div className="evidence-record"><p className="section-label">{item.record.kind}</p><h3>{item.record.title}</h3>{item.record.body.map(paragraph => <p key={paragraph}>{paragraph}</p>)}<p className="record-meta">{item.record.sourceLabel}</p></div><p className="limitation"><strong>Interpretation.</strong> {item.record.limitation}</p>{item.related.length > 0 && <nav className="linked-studies" aria-label="Related public work"><h3>Explore the related work</h3><ul>{item.related.map(link => <li key={link.href}><a href={link.href}>{link.label}</a></li>)}</ul></nav>}</section>
+    <section id="connections" className="dossier-section" tabIndex="-1"><h2>Connections to the rest of Katabasis</h2><ul className="connection-list">{connections.map(connection => <li key={connection.id}><a href={'/system/' + connection.id + '/'}>{connection.label || connection.target.title}</a><p>{connection.reason}</p></li>)}</ul></section>
+    <nav className="dossier-next" aria-label="Subsystem guide navigation">{previous ? <a href={'/system/' + previous.id + '/'}><span>Previous guide</span>{previous.title}</a> : <a href="/system/">System overview</a>}{next ? <a href={'/system/' + next.id + '/'}><span>Next guide</span>{next.title}</a> : <a href="/system/components/">All subsystem guides</a>}</nav>
+  </article></div></Shell>
 }
 
 function About({ route }) {
@@ -189,7 +229,7 @@ function Credits({ route }) {
 
 export default function PublicSite() {
   const route = currentRoute()
-  const pages = { home: Home, work: Work, case: Case, system: System, about: About, notes: Notes, refusal: Note, robustness: Note, credits: Credits }
+  const pages = { home: Home, work: Work, case: Case, system: System, components: Components, subsystem: Subsystem, about: About, notes: Notes, refusal: Note, robustness: Note, credits: Credits }
   const Page = pages[route.page] || Simple
   return <Page route={route} />
 }
