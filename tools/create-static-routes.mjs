@@ -15,8 +15,6 @@ const routes = [
   ['notes/safe-refusal', 'Research Permissions | Katabasis', 'How the research workflow distinguishes execution, research outcomes and operator permissions.'],
   ['about', 'Max McCollom | Columbia Financial Economics', 'Financial Economics at Columbia University, planned Mathematics minor, expected May 2029. Creator of Katabasis since April 2026.'],
   ['credits', 'Image Credits | Katabasis', 'Sources for the institutional identity images used on the site.'],
-  ['archive', 'Visual Archive | Katabasis', 'An earlier visual exploration of the Katabasis project.'],
-  ['estate', 'Katabasis | Visual Archive', 'The earlier interactive visual presentation of Katabasis.'],
 ]
 const expandedRoutes = new Map([...routes, ...researchCases.map(item => ['work/' + item.id, item.title + ' | Katabasis', item.summary]), ...systemPages.flatMap(item => { const canonical = subsystemPath(item).replace(/^\/|\/$/g, ''); return [[canonical, item.title + ' | Katabasis', item.deck, canonical], ...((item.slug && item.slug !== item.id) ? [['system/' + item.id, item.title + ' | Katabasis', item.deck, canonical]] : [])] })].map(item => [item[0], item]))
 const base = readFileSync('dist/index.html', 'utf8')

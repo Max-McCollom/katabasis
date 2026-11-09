@@ -7,8 +7,7 @@ import react from '@vitejs/plugin-react'
 // subset of cleared source by construction.
 export default defineConfig({
   plugins: [react()],
-  // A 3D dep was resolving its own React copy, breaking hooks in the minigame.
-  // Force a single React instance across the graph.
+  // Keep one React instance across the presentation components.
   resolve: { dedupe: ['react', 'react-dom'] },
   build: {
     sourcemap: false,

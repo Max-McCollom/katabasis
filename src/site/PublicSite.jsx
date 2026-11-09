@@ -30,7 +30,6 @@ const routes = {
   '/notes': ['notes', 'Research Notes | Katabasis', 'Notes on research design, reproducibility and evidence from the Katabasis project.'],
   '/notes/safe-refusal': ['refusal', 'Research Permissions | Katabasis', 'How the research workflow distinguishes execution, research outcomes and operator permissions.'],
   '/work/narrowed-claim': ['robustness', 'Reproduction & Robustness | Katabasis', 'A research case about separating an exact reproduction from robustness to an observation choice.'],
-  '/archive': ['archive', 'Visual Archive | Katabasis', 'An earlier visual exploration of the Katabasis project.'],
   '/credits': ['credits', 'Image Credits | Katabasis', 'Sources for the institutional identity images used on this site.'],
 }
 
@@ -71,7 +70,7 @@ function Footer() {
   return <footer className="site-footer"><div className="shell footer-inner">
     <div className="footer-brand"><a href="/">Katabasis</a><p>Independent markets research by Max McCollom.</p></div>
     <nav className="footer-links" aria-label="Resources"><a href="/system/components/">Subsystem directory</a><a href="/research/katabasis-overview.pdf">Research overview PDF</a><a href={source} target="_blank" rel="noreferrer">Website source</a><a href={linkedin} target="_blank" rel="noreferrer">LinkedIn</a></nav>
-    <div className="footer-meta"><span>April 2026–present · New York</span><a href="/archive/">Visual archive</a><a href="/credits/">Image credits</a></div>
+    <div className="footer-meta"><span>April 2026–present · New York</span><a href="/credits/">Image credits</a></div>
   </div></footer>
 }
 
@@ -227,8 +226,7 @@ function Notes({ route }) {
 }
 
 function Simple({ route }) {
-  const archive = route.page === 'archive'
-  return <Shell route={route}><section className="page-heading shell simple-page"><h1>{archive ? 'An earlier visual exploration' : 'Page not found'}</h1><p className="page-lede">{archive ? 'The earlier 3D presentation remains available as a record of the project’s visual development.' : 'Explore the selected research or return to the home page.'}</p><a className="text-link" href={archive ? '/estate/' : '/'}>{archive ? 'Open the 3D archive' : 'Return home'}</a></section></Shell>
+  return <Shell route={route}><section className="page-heading shell simple-page"><h1>Page not found</h1><p className="page-lede">Explore the selected research or return to the home page.</p><a className="text-link" href="/">Return home</a></section></Shell>
 }
 
 function Credits({ route }) {

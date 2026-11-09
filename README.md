@@ -51,6 +51,10 @@ identify Max's university and former employer.
 The public case tables summarize the research design and interpretation;
 they are not performance datasets or live operating results.
 
+The earlier 3D presentation has been removed from the public application,
+generated routes and static assets. Its source remains recoverable from Git
+history; it is not part of the current website or build dependencies.
+
 ## Safety model
 
 This is a public repository, so the gate against leakage sits before a commit,
