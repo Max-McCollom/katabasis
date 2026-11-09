@@ -1,0 +1,6 @@
+# Merge this into the owner's generated supabase/config.toml.
+# New asymmetric-key projects can hit the legacy gateway compatibility check.
+# Authentication is mandatory INSIDE this function via auth.getUser(user JWT),
+# followed by live user-scoped RLS checks before/after private byte retrieval.
+[functions.research-download]
+verify_jwt = false

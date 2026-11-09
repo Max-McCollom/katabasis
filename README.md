@@ -14,7 +14,8 @@ from his specifications.
 This repository contains the source for the public presentation website. It
 shares high-level system design and sanitized case studies. The research
 implementation and working data are maintained separately. The website is
-fully static and has no connection to a live trading system.
+a static frontend with Supabase authentication and a separate private research
+library. It has no connection to a live trading system.
 
 [Explore Katabasis](https://katabasis.rip/) ·
 [Max on LinkedIn](https://www.linkedin.com/in/max-mccollom-448bbb367/)
@@ -54,6 +55,22 @@ they are not performance datasets or live operating results.
 The earlier 3D presentation has been removed from the public application,
 generated routes and static assets. Its source remains recoverable from Git
 history; it is not part of the current website or build dependencies.
+
+## Private research access
+
+The research-access feature uses email/password accounts, verified email,
+optional phone contact information and owner review. Registration alone never
+authorizes private research. The owner can approve, reject or revoke requests;
+material grants are checked by the database and again during file delivery.
+
+Detailed research files live only in private Supabase Storage. They must not be
+copied into this repository, `public/`, build artifacts or Git history. Browser
+configuration contains only the project URL and a publishable key. Privileged
+keys remain in the provider's server environment.
+
+See [research access operations](docs/RESEARCH_ACCESS.md) for setup, review and
+verification. A working email sender and backend acceptance checks are required
+before enabling registration for visitors.
 
 ## Safety model
 

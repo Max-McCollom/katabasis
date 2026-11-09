@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { researchCases } from './research.js'
 import { systemGroups, systemPages } from './systems.js'
 import ResearchExhibit, { ProcessDiagram, ObservationDiagram } from './ResearchExhibit.jsx'
 import SystemMap from './SystemMap.jsx'
 import { subsystemExhibit } from './exhibits.js'
 import { subsystemPath } from './navigation.js'
+import { readAuthConfiguration } from './access/authConfiguration.js'
 import './site.css'
+
+const PrivateAccess = lazy(() => import('./access/PrivateAccess.jsx'))
+const researchAccessEnabled = Boolean(readAuthConfiguration())
 
 const linkedin = 'https://www.linkedin.com/in/max-mccollom-448bbb367/'
 const source = 'https://github.com/Max-McCollom/katabasis'
@@ -31,6 +35,7 @@ const routes = {
   '/notes/safe-refusal': ['refusal', 'Research Permissions | Katabasis', 'How the research workflow distinguishes execution, research outcomes and operator permissions.'],
   '/work/narrowed-claim': ['robustness', 'Reproduction & Robustness | Katabasis', 'A research case about separating an exact reproduction from robustness to an observation choice.'],
   '/credits': ['credits', 'Image Credits | Katabasis', 'Sources for the institutional identity images used on this site.'],
+  '/research-access': ['access', 'Research Access | Katabasis', 'Sign in or request owner-approved access to private Katabasis research.'],
 }
 
 function currentRoute() {
@@ -56,6 +61,7 @@ function Header({ page }) {
     { page: 'system', href: '/system/', label: 'System' },
     { page: 'notes', href: '/notes/', label: 'Notes' },
     { page: 'about', href: '/about/', label: 'About' },
+    ...(researchAccessEnabled ? [{ page: 'access', href: '/research-access/', label: 'Research access' }] : []),
   ]
   return <header className="site-header"><div className="shell header-inner">
     <a href="/" className="wordmark" aria-label="Katabasis home" aria-current={page === 'home' ? 'page' : undefined}><Mark /><span className="brand-name">Katabasis</span></a>
@@ -69,7 +75,7 @@ function Header({ page }) {
 function Footer() {
   return <footer className="site-footer"><div className="shell footer-inner">
     <div className="footer-brand"><a href="/">Katabasis</a><p>Independent markets research by Max McCollom.</p></div>
-    <nav className="footer-links" aria-label="Resources"><a href="/system/components/">Subsystem directory</a><a href="/research/katabasis-overview.pdf">Research overview PDF</a><a href={source} target="_blank" rel="noreferrer">Website source</a><a href={linkedin} target="_blank" rel="noreferrer">LinkedIn</a></nav>
+    <nav className="footer-links" aria-label="Resources"><a href="/system/components/">Subsystem directory</a><a href="/research/katabasis-overview.pdf">Research overview PDF</a>{researchAccessEnabled && <a href="/research-access/">Research access</a>}<a href={source} target="_blank" rel="noreferrer">Website source</a><a href={linkedin} target="_blank" rel="noreferrer">LinkedIn</a></nav>
     <div className="footer-meta"><span>April 2026–present · New York</span><a href="/credits/">Image credits</a></div>
   </div></footer>
 }
@@ -202,7 +208,7 @@ function Subsystem({ route }) {
 }
 
 function About({ route }) {
-  return <Shell route={route}><header className="page-heading shell about-heading"><div><Breadcrumbs items={[{ label: 'About' }]} /><h1>Max McCollom</h1><p className="page-lede">Financial Economics at Columbia University.<br />Mathematics minor planned. Expected May 2029.</p><p>I am interested in how economic ideas become useful investment and trading decisions. I created Katabasis in April 2026 to pursue that question through independent research and system design.</p><a className="text-link" href={linkedin} target="_blank" rel="noreferrer">Connect on LinkedIn</a></div><div className="education-mark"><img src="/media/columbia-university-white.svg" alt="Columbia University" width="320" height="160" /><p>Financial Economics<br /><span>2026–2029 · New York</span></p></div></header>
+  return <Shell route={route}><header className="page-heading shell about-heading"><div><Breadcrumbs items={[{ label: 'About' }]} /><h1>Max McCollom</h1><p className="page-lede">Financial Economics at Columbia University.<br />Mathematics minor planned. Expected May 2029.</p><p>I am interested in how economic ideas become useful investment and trading decisions. I created Katabasis in April 2026 to pursue that question through independent research and system design.</p><a className="text-link" href={linkedin} target="_blank" rel="noreferrer">Connect on LinkedIn</a></div><aside className="about-profile" aria-label="Portrait and education"><figure className="about-portrait"><img src="/media/max-mccollom-portrait.png" alt="Max McCollom" width="1254" height="1254" decoding="async" /></figure><div className="education-mark"><img src="/media/columbia-university-white.svg" alt="Columbia University" width="320" height="160" /><p>Financial Economics<br /><span>2026–2029 · New York</span></p></div></aside></header>
     <section className="project-panel shell section-block" aria-labelledby="about-project-title"><Mark full /><div className="project-panel-copy"><p className="section-label">Independent project · April 2026–present</p><h2 id="about-project-title">Katabasis</h2><p>I define the financial questions, methods, data choices, system structure and evaluation criteria for a connected markets research project. AI generates the software implementation from my specifications.</p><p>The work brings together portfolio studies, investment-product comparisons, data validation and a workflow that preserves evidence and reasons for revising a conclusion.</p><a className="text-link" href="/work/">Explore the research</a></div></section>
     <section className="experience-section shell section-block" aria-labelledby="experience-title"><div className="section-heading"><div><h2 id="experience-title">Experience and initiative</h2><p>Operating analysis and practical responsibility.</p></div></div><div className="experience-list">
       <article className="experience-row"><div className="org-symbol"><img src="/media/ridgewood-water-logo.png" alt="Ridgewood Water" width="110" height="110" loading="lazy" /></div><div><p className="section-label">October 2024–August 2026 · Ridgewood, NJ</p><h3>SCADA Systems Operator & Data Analyst</h3><h4>Ridgewood Water</h4><p>Analyzed operating data in Excel to identify pump-scheduling improvements with estimated annual electricity savings of $10,000+. Developed a procedure that maintained system pressure during a three-day facility outage and was adopted system-wide.</p><p className="supporting-copy">Worked with supervisory control and data acquisition systems for a municipal utility serving 60,000 residents across four municipalities.</p></div></article>
@@ -229,13 +235,17 @@ function Simple({ route }) {
   return <Shell route={route}><section className="page-heading shell simple-page"><h1>Page not found</h1><p className="page-lede">Explore the selected research or return to the home page.</p><a className="text-link" href="/">Return home</a></section></Shell>
 }
 
+function Access({ route }) {
+  return <Shell route={route}><Suspense fallback={<section className="page-heading shell" role="status"><h1>Research access</h1><p>Loading account access.</p></section>}><PrivateAccess><p>The <a href="/work/">public research summaries</a> remain available without an account. Private materials are shared individually after owner review.</p></PrivateAccess></Suspense></Shell>
+}
+
 function Credits({ route }) {
   return <Shell route={route}><article className="page-heading shell credits-page"><Breadcrumbs items={[{ label: 'Image credits' }]} /><h1>Image credits</h1><div className="credits-list"><section><h2>Columbia University</h2><p>The complete University wordmark is from <a href="https://worldprojects.columbia.edu/sites/default/files/2023-12/columbia-university-logo-white.svg">Columbia World Projects</a>. It identifies my university in the education entry.</p></section><section><h2>Ridgewood Water</h2><p>The utility logo is reproduced from its <a href="https://water.ridgewoodnj.net/wp-content/uploads/2025/07/B2775-Ridgewood-water-dept-2025_REV6.pdf">official 2025 Annual Drinking Water Quality Report</a>. It identifies my former employer.</p></section><section><h2>Katabasis</h2><p>The gold descending K and Katabasis wordmark are the project's original identity. The header uses a crop of the original artwork; the complete artwork appears on the About page.</p></section></div></article></Shell>
 }
 
 export default function PublicSite() {
   const route = currentRoute()
-  const pages = { home: Home, work: Work, case: Case, system: System, components: Components, subsystem: Subsystem, about: About, notes: Notes, refusal: Note, robustness: Note, credits: Credits }
+  const pages = { home: Home, work: Work, case: Case, system: System, components: Components, subsystem: Subsystem, about: About, notes: Notes, refusal: Note, robustness: Note, credits: Credits, access: Access }
   const Page = pages[route.page] || Simple
   return <Page route={route} />
 }

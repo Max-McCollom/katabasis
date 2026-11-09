@@ -26,6 +26,21 @@ file:tools/validate-public-telemetry.mjs
 file:tools/create-static-routes.mjs
 file:public/research/katabasis-overview.pdf
 
+# -- reviewed access infrastructure only; never private research/data --------
+file:backend/.gitignore
+file:backend/README.md
+file:backend/owner-approve.example.sql
+file:backend/owner-bootstrap.example.sql
+file:backend/owner-revoke.example.sql
+file:backend/supabase/function-config.toml
+file:backend/supabase/functions/research-download/index.ts
+file:backend/supabase/migrations/202611080001_research_access.sql
+file:backend/supabase/tests/dashboard-research-access.sql
+file:backend/supabase/tests/database/research_access.test.sql
+file:src/site/access/tests/access.test.mjs
+file:src/site/access/tests/reviewer.test.mjs
+file:src/site/access/tests/routing.test.mjs
+
 # -- source and assets ------------------------------------------------------
 dir:src/:html css js jsx glsl vert frag json svg
 dir:public/:svg png jpg jpeg webp avif ico woff2 mp4 webm vtt xml txt glb gltf bin hdr ktx2 mp3 ogg wav json js wasm

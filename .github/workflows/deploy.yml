@@ -38,7 +38,13 @@ jobs:
       - name: Telemetry fixture backstop
         run: node tools/validate-public-telemetry.mjs
 
+      # These are intentionally public browser settings. Authorization is
+      # enforced by Supabase policies and the authenticated download function.
+      # Never put a secret/service-role key in a VITE_ variable.
       - run: npm run build
+        env:
+          VITE_SUPABASE_URL: https://ftpkehfismkxpwxwarzr.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_b5qIZFcMFZBYQPU7-k8rTA_XW8dYlhA
 
       - uses: actions/upload-pages-artifact@v3
         with:

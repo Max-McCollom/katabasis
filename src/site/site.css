@@ -195,6 +195,12 @@ pre { max-width: 100%; overflow-x: auto; }
 /* About: the full project identity is distinct from institutional marks. */
 .about-heading { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(250px, .85fr); gap: 56px; align-items: start; }
 .about-heading > div > p { max-width: 67ch; }
+.about-profile { width: 100%; max-width: 320px; justify-self: end; }
+.about-portrait { margin: 0 0 18px; }
+.about-portrait img { width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; }
+.about-profile .education-mark { padding: 18px 20px; }
+.about-profile .education-mark img { width: min(100%, 230px); max-height: 64px; margin-bottom: 14px; }
+.about-profile .education-mark p { font-size: 14px; line-height: 1.5; }
 .education-mark { padding: 26px; background: var(--dark); color: var(--white); }
 .education-mark img { width: min(100%, 260px); max-height: 100px; object-fit: contain; object-position: left center; margin-bottom: 22px; }
 .education-mark p { color: var(--white); font-size: 16px; }
@@ -321,6 +327,8 @@ pre { max-width: 100%; overflow-x: auto; }
   .layer-record dd { font-size: 16px; }
   .layer-example { padding: 18px; }
   .about-heading { display: block; }
+  .about-profile { margin-top: 28px; }
+  .about-profile .education-mark { margin-top: 0; }
   .education-mark { max-width: 400px; margin-top: 24px; padding: 24px; }
   .project-panel { grid-template-columns: 130px minmax(0, 1fr); gap: 24px; align-items: start; margin-block: 4px 28px; padding-block: 24px; }
   .project-panel-copy h2 { font-size: 24px; }
